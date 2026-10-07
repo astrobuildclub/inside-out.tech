@@ -28,10 +28,13 @@ const parts = title.split("*").map((text, i) => ({ text, highlight: i % 2 === 1 
   .panel { display: grid; gap: var(--space-l); align-items: center; border-radius: var(--radius); }
   /* Lemon-kaart zonder foto: gecentreerd, zoals live */
   .panel:not(.has-image) { padding: var(--space-xl) var(--space-l); justify-items: center; text-align: center; }
-  .panel:not(.has-image) .text { justify-items: center; max-inline-size: 48rem; }
+  .panel:not(.has-image) .text { justify-items: center; max-inline-size: 52rem; }
+  .panel:not(.has-image) h2 { font-size: var(--step-4); }
+  .panel:not(.has-image) p { max-inline-size: 46ch; font-size: var(--step--1); }
   @media (min-width: 62rem) { .panel.has-image { grid-template-columns: 1fr 1fr; gap: var(--space-2xl); } }
   .text { display: grid; gap: var(--space-s); justify-items: start; max-inline-size: 40rem; }
   h2 { font-size: var(--step-3); }
   .has-image h2 { font-size: var(--step-4); }
-  .media { aspect-ratio: 4 / 3; }
+  .media { aspect-ratio: 1; background: var(--sky); }
+  .media :global(img) { object-fit: cover; object-position: bottom; }
 </style>

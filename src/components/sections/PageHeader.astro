@@ -36,7 +36,8 @@ const short = stegaClean(title).length <= 24;
   :global(.page-header.has-image) { min-block-size: clamp(20rem, 45vh, 30rem); display: grid; align-items: end; }
   .bg { position: absolute; inset: 0; z-index: -1; }
   .bg :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
-  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, var(--planet) 92%, transparent), color-mix(in srgb, var(--planet) 55%, transparent) 45%, color-mix(in srgb, var(--planet) 15%, transparent)); }
+  /* Neutrale donkere waas over de foto (live), onderin iets sterker voor de titel */
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(0% 0 0 / 0.55), oklch(0% 0 0 / 0.3) 50%, oklch(0% 0 0 / 0.2)); }
   .inner { display: grid; gap: var(--space-s); }
   .titles { display: grid; gap: var(--space-2xs); }
   h1 { font-size: var(--step-4); max-inline-size: 28ch; }
@@ -50,11 +51,14 @@ const short = stegaClean(title).length <= 24;
   .crumbs ol {
     display: inline-flex; flex-wrap: wrap; gap: 0.5em;
     margin-block-start: var(--space-xs);
-    padding: 0.35em 0.9em;
+    padding: 0.7em 1.4em;
     border-radius: var(--radius-pill);
     background: var(--white); color: var(--planet);
-    font-size: var(--step--1);
+    font-size: var(--step-0);
+    font-weight: 500;
   }
-  .crumbs li + li::before { content: "›"; margin-inline-end: 0.5em; }
-  .crumbs a { color: inherit; }
+  .crumbs ol { gap: 0.9em; }
+  .crumbs li + li::before { content: "›"; margin-inline-end: 0.9em; }
+  .crumbs a { color: inherit; text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
 </style>

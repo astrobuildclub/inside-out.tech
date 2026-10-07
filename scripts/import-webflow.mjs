@@ -298,11 +298,11 @@ const CTA_ADVIES = (title) =>
 
 async function ctaDuurzaam() {
   return section("cta", {
-    title: "Samen gaan we voor *duurzaam*.",
+    title: "*Samen* gaan we voor *duurzaam*.",
     text: "Weten hoe onze Plug & Play modules jou kunnen helpen om sneller, voorspelbaarder en efficiënter te verduurzamen?",
     link: link("Maak een afspraak", "contact"),
     image: await image("images/pauldas.png", { alt: "Paul Das van Inside Out" }),
-    theme: "light",
+    theme: "white",
   });
 }
 
@@ -644,7 +644,7 @@ async function importSingletons() {
   add({
     _id: "navigation",
     _type: "navigation",
-    headerCta: link("Contact", "contact", "secondary"),
+    headerCta: link("contact", "contact", "secondary"),
     main: [
       link("Bouwpartners", "vastgoedbeheer"),
       link("Installatiepartners", "installateur"),

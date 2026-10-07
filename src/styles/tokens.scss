@@ -8,7 +8,10 @@
 @use 'utopia-core-scss/src/utopia' as utopia;
 
 :root {
-  color-scheme: light dark;
+  /* Voorlopig altijd licht. Dark mode later terug: "light dark" + de @media/data-theme-regels
+     (zie git-geschiedenis, commit "content en layout gelijk aan live"). De tokens gebruiken
+     light-dark(), dus de donkere waarden staan al klaar. */
+  color-scheme: light;
   interpolate-size: allow-keywords;
 
   /* Typografie */
@@ -49,6 +52,7 @@
   --content-width: 46rem;
   --popout-width: 6rem;
   --feature-width: 16rem;
+  --container-width: 73.75rem; /* 1180px: header, footer en alle secties */
   --section-space: var(--space-xl-3xl);
 
   /* Vormen & beweging */
@@ -67,6 +71,7 @@
   --blue: oklch(52.1% 0.267 269.5);     /* #3645FF System Shock Blue */
   --ink: oklch(19.7% 0.007 229.3);      /* #121618 Charging Cable Black */
   --concrete: oklch(93.4% 0.005 95.1);  /* #EAE9E5 Soft Concrete */
+  --sky: oklch(84% 0.06 262);           /* lichtblauw achter portretten (live) */
   --white: oklch(100% 0 0);
 
   /* Rollen voor de pagina; secties overschrijven ze via [data-tone] in themes.css */
@@ -87,8 +92,6 @@
   --btn-line: var(--color-accent);
 }
 
-:root[data-theme='light'] { color-scheme: light; }
-:root[data-theme='dark'] { color-scheme: dark; }
 
 @media (prefers-reduced-motion: reduce) {
   :root { --duration: 0ms; }

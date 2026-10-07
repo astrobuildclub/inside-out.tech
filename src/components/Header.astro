@@ -92,21 +92,30 @@ const a = settings.address;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-m);
-    min-block-size: 4.5rem;
+    min-block-size: 5.25rem;
   }
   .home :global(.logo) { inline-size: clamp(8.5rem, 12vw, 10.5rem); block-size: auto; color: var(--white); }
   .home { display: block; border-radius: 2px; }
 
   .nav-inline { display: none; margin-inline-start: auto; }
-  .nav-inline ul { display: flex; gap: var(--space-m); }
+  .nav-inline ul { display: flex; gap: var(--space-3xs); }
   .nav-inline a, .menu-links a {
     text-decoration: none;
     font-weight: 500;
     background: linear-gradient(var(--lemon), var(--lemon)) no-repeat left bottom / 0 2px;
     transition: background-size var(--duration) var(--ease);
   }
-  .nav-inline a { font-size: var(--step--1); padding-block: 0.4em; }
-  .nav-inline a:hover, .nav-inline a[aria-current="page"],
+  .nav-inline a {
+    display: block;
+    padding: 0.45em 1em;
+    border-radius: var(--radius-pill);
+    background: none;
+    font-size: var(--step-0);
+    font-weight: 400;
+    transition: background-color var(--duration) var(--ease);
+  }
+  /* Actief en hover: donkere pill (live) */
+  .nav-inline a:hover, .nav-inline a[aria-current="page"] { background-color: var(--planet-deep); }
   .menu-links a:hover, .menu-links a[aria-current="page"] { background-size: 100% 2px; }
 
   .actions { display: flex; align-items: center; gap: var(--space-xs); }

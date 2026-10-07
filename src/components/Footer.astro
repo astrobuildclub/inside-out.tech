@@ -74,13 +74,12 @@ const year = new Date().getFullYear();
 <style>
   .site-footer { padding-block: var(--space-2xl) var(--space-m); }
   .grid { display: grid; gap: var(--space-xl); }
-  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 36rem); align-items: end; } }
+  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 39rem); align-items: start; } }
 
   .home :global(.logo) { inline-size: 10.5rem; block-size: auto; color: var(--white); margin-block-end: var(--space-l); }
   .home { display: inline-block; }
   address { font-style: normal; display: grid; gap: var(--space-s); font-size: var(--step--1); }
-  address a { text-decoration: none; }
-  address a:hover { text-decoration: underline; }
+  address a:hover { text-decoration-thickness: 2px; }
   .socials { display: flex; gap: var(--space-2xs); margin-block-start: var(--space-m); }
   .socials a {
     display: grid; place-items: center;
@@ -102,17 +101,15 @@ const year = new Date().getFullYear();
   .panel nav ul { display: grid; gap: 0.35em; }
   .panel nav a { text-decoration: none; }
   .panel nav a:hover { text-decoration: underline; }
-  .cta { display: grid; gap: var(--space-s); align-content: start; font-size: var(--step-0); font-weight: 500; line-height: var(--leading-snug); }
+  .cta { display: grid; gap: var(--space-m); align-content: start; font-size: var(--step-0); font-weight: 500; line-height: var(--leading-snug); }
   .cta :global(.button) { justify-self: start; }
   .legal {
     grid-column: 1 / -1;
     display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2xs) var(--space-m);
-    padding-block-start: var(--space-s);
-    border-block-start: 1px solid var(--color-line);
-    color: var(--color-muted);
     font-size: 0.8125rem;
   }
   .legal ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-s); }
-  .legal a, .linklike { color: inherit; }
-  .linklike { background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; font: inherit; }
+  .legal a, .linklike { color: inherit; text-decoration: none; }
+  .legal a:hover, .linklike:hover { text-decoration: underline; }
+  .linklike { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
 </style>

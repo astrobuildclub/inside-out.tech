@@ -7,9 +7,7 @@
  * light-dark() kijkt naar het color-scheme van het element zelf. Een witte kaart binnen
  * een groene sectie erft anders "dark"; daarom zetten white/light het paginaschema terug.
  */
-:root { --page-scheme: light; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) { --page-scheme: dark; } }
-:root[data-theme='dark'] { --page-scheme: dark; }
+:root { --page-scheme: light; } /* dark mode staat uit, zie tokens.scss */
 
 /* Basisrollen opnieuw zetten, zodat een lichte tone binnen een donkere sectie niets erft. */
 [data-tone='white'], [data-tone='light'] {

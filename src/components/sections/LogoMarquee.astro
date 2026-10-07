@@ -43,9 +43,6 @@ const rows = [
   .logos { display: flex; flex-shrink: 0; gap: var(--space-xl); padding-inline-end: var(--space-xl); align-items: center; }
   .logos li { inline-size: 9rem; block-size: 4rem; display: grid; place-items: center; }
   .logos :global(img) { max-inline-size: 100%; max-block-size: 100%; inline-size: auto; object-fit: contain; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .logos :global(img) { filter: grayscale(1) invert(1) brightness(1.6); mix-blend-mode: screen; }
-  }
   @media (prefers-reduced-motion: no-preference) {
     .logos { animation: marquee 30s linear infinite; }
     .marquee:hover .logos { animation-play-state: paused; }

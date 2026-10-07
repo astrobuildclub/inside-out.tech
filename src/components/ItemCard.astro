@@ -78,7 +78,14 @@ const source = stegaClean(item.linkUrl);
   .module { padding: var(--space-s); border-radius: var(--radius); background: var(--color-surface); }
   .module .media { background: transparent; }
   .module .media :global(img) { object-fit: contain; }
-  .module .meta { color: var(--color-accent); font-weight: 500; }
+  .module { transition: background var(--duration) var(--ease), color var(--duration) var(--ease); }
+  .module .meta { color: var(--blue); font-weight: 700; }
+  .module .title { font-size: var(--step-3); }
+  .module .excerpt { color: inherit; }
+  /* Hover: blauw vlak met witte tekst (live) */
+  .module:hover, .module:has(.title a:focus-visible) { background: var(--blue); color: var(--white); }
+  .module:hover .meta, .module:has(.title a:focus-visible) .meta { color: var(--white); }
+  .module:hover .media :global(img) { scale: 1; }
 
   /* Nieuws: brede kaart, tekst links en beeld rechts */
   .news {

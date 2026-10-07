@@ -19,6 +19,10 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Importscript `scripts/import-webflow.mjs` voor CSV-content, vaste pagina's, beelden, video en PDF.
 
 ### Gewijzigd
+- Dark mode voorlopig uit: de site is altijd licht (`color-scheme: light`). De tokens houden hun `light-dark()`-waarden, zodat dark mode later terug kan.
+- Containerbreedte 1180px (`--container-width`) voor header, footer en secties.
+- Witruimte: alleen twee secties met dezelfde achtergrond na elkaar delen hun ruimte (de content plakte tegen de projectkop).
+- Uit de vergelijking met live: modulekaart blauw bij hover, feitenblok projecten breder met "Adres" en blauwe pill, kruimelpad zonder onderstreping, actief menu-item als pill, footer met logo bovenaan, CTA-foto op lichtblauw vlak (op wit), grotere titel in de lemon-CTA, neutrale overlay over kopfoto's, "contact" en "*Samen* … *duurzaam*" zoals live.
 - Live (inside-out.tech) is de bron: gepubliceerde content gelijk aan live (stappenplan installatiepartners, RGS-fase 3, io Charlie/Echo gepubliceerd, nieuwsbronnen en -datums, volgorde projecten en team, paginatitels). Waar de testexport afwijkt staat die versie als Sanity-draft.
 - Layout gelijkgetrokken met live: paginakoppen (stacked/split, wit/licht/groen), kleinere typografie, gecentreerde lemon-intro en -CTA, projectkaarten zonder vlak (2 kolommen), modules 3 kolommen, team 4 kolommen met e-mail, nieuws als brede kaarten met bron, voordelen in 2 kolommen, stappen als witte kaarten, moduledetail met beeld links, feitenblok projecten als groene kaart, contactgegevens in lemon-kaart.
 - Modules staan op `/modules/<slug>` (zelfde pad als Webflow).
