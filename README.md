@@ -9,7 +9,7 @@
 | **Status** | WIP: migratie vanaf Webflow (`insideout-test.webflow`) |
 | **SLA** | TODO |
 | **Live** | https://inside-out.tech (nog Webflow) |
-| **Netlify** | team All This, site TODO |
+| **Netlify** | team All This, site `insideout-tech` ([insideout-tech.netlify.app](https://insideout-tech.netlify.app)) |
 | **CMS** | Sanity project `cf1ukp64`, dataset `production`, Studio op `/admin` |
 | **Repo** | [github.com/astrobuildclub/inside-out.tech](https://github.com/astrobuildclub/inside-out.tech) (private) |
 | **Notion** | TODO |

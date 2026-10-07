@@ -19,6 +19,7 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Importscript `scripts/import-webflow.mjs` voor CSV-content, vaste pagina's, beelden, video en PDF.
 
 ### Gewijzigd
+- Netlify-site `insideout-tech` in team All This, gekoppeld aan de repo; env-vars gezet (read-token als secret voor production, deploy previews en branch deploys).
 - Repo op GitHub: `astrobuildclub/inside-out.tech` (private), met About-sectie.
 - Tweede vergelijkingsronde met live (screenshots in `_webflow-export/screens/`): kopfoto min. 480px op desktop; standaard witte achtergrond (intro en voordelen Installatiepartners/Bouwpartners op wit); inpasbaarheidsbeeld groot op groen; stappenplan zonder eigen titel in één witte kaart; Over ons met "Wat we leveren" en "Het team" in één tekstkolom, teamfoto's tot de rand, logo's in omlijnde vakken en eigen CTA-tekst; moduledetail zonder kruimelpad met blauwe specificatiekaart; projectdetail met smal feitenblok, grotere galerij en CTA "Benieuwd wat de modules…"; projectkaarten met wit tekstvlak; contactgegevens en kaart in één lemon-kaart; smallere footer.
 - Fade-in robuuster: content wordt pas verborgen als het script draait, en het script start ook als het na het eerste `astro:page-load` laadt.
