@@ -33,17 +33,20 @@ const short = stegaClean(title).length <= 24;
 
 <style>
   :global(.page-header) { position: relative; isolation: isolate; padding-block: var(--space-xl) var(--space-l); }
-  :global(.page-header.has-image) { min-block-size: clamp(20rem, 45vh, 30rem); display: grid; align-items: end; }
+  :global(.page-header.has-image) { min-block-size: 20rem; display: grid; align-items: end; }
+  @media (min-width: 62rem) { :global(.page-header.has-image) { min-block-size: 480px; } }
   .bg { position: absolute; inset: 0; z-index: -1; }
   .bg :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
   /* Neutrale donkere waas over de foto (live), onderin iets sterker voor de titel */
   .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(0% 0 0 / 0.55), oklch(0% 0 0 / 0.3) 50%, oklch(0% 0 0 / 0.2)); }
   .inner { display: grid; gap: var(--space-s); }
   .titles { display: grid; gap: var(--space-2xs); }
-  h1 { font-size: var(--step-4); max-inline-size: 28ch; }
-  :global(.page-header.short) h1 { font-size: var(--step-5); }
+  h1 { font-size: var(--step-3); max-inline-size: 30ch; }
+  :global(.page-header.short) h1, :global(.page-header.has-image) h1 { font-size: var(--step-5); }
   .eyebrow { color: var(--color-accent); text-transform: none; letter-spacing: 0; }
   .intro { color: var(--color-fg); font-size: var(--step-0); line-height: var(--leading-normal); max-inline-size: 48ch; }
+  /* Intro onder een korte titel (contact): groter, zoals live */
+  :global(.page-header.short:not(.split)) .intro { font-size: var(--step-1); line-height: var(--leading-snug); }
   @media (min-width: 62rem) {
     :global(.page-header.split) .inner { grid-template-columns: 1fr minmax(0, 32rem); align-items: start; gap: var(--space-xl); }
   }

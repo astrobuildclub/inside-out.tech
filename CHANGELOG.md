@@ -19,6 +19,9 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Importscript `scripts/import-webflow.mjs` voor CSV-content, vaste pagina's, beelden, video en PDF.
 
 ### Gewijzigd
+- Tweede vergelijkingsronde met live (screenshots in `_webflow-export/screens/`): kopfoto min. 480px op desktop; standaard witte achtergrond (intro en voordelen Installatiepartners/Bouwpartners op wit); inpasbaarheidsbeeld groot op groen; stappenplan zonder eigen titel in één witte kaart; Over ons met "Wat we leveren" en "Het team" in één tekstkolom, teamfoto's tot de rand, logo's in omlijnde vakken en eigen CTA-tekst; moduledetail zonder kruimelpad met blauwe specificatiekaart; projectdetail met smal feitenblok, grotere galerij en CTA "Benieuwd wat de modules…"; projectkaarten met wit tekstvlak; contactgegevens en kaart in één lemon-kaart; smallere footer.
+- Fade-in robuuster: content wordt pas verborgen als het script draait, en het script start ook als het na het eerste `astro:page-load` laadt.
+- `npm run import:webflow -- --only=page` schrijft alleen de opgegeven documenttypen.
 - Dark mode voorlopig uit: de site is altijd licht (`color-scheme: light`). De tokens houden hun `light-dark()`-waarden, zodat dark mode later terug kan.
 - Containerbreedte max. 1344px (`--container-width`) voor header, footer en secties.
 - Witruimte: alleen twee secties met dezelfde achtergrond na elkaar delen hun ruimte (de content plakte tegen de projectkop).

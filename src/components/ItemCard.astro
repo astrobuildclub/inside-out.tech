@@ -19,7 +19,7 @@ const source = stegaClean(item.linkUrl);
 ---
 {type === "person" ? (
   <article class="item person">
-    <div class="media"><SanityImg image={item.image} sizes="(min-width: 62rem) 22vw, 45vw" aspect={4 / 5} /></div>
+    <div class="media"><SanityImg image={item.image} sizes="(min-width: 62rem) 22vw, 45vw" aspect={5 / 7} /></div>
     <div class="body">
       <H class="title">{item.title}</H>
       {item.role && <p class="meta">{item.role}</p>}
@@ -74,6 +74,12 @@ const source = stegaClean(item.linkUrl);
   .item:has(.title a:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 4px; border-radius: var(--radius); }
   .excerpt { font-size: var(--step--1); color: var(--color-muted); max-inline-size: 60ch; }
 
+  /* Project op een lichte sectie (overzicht): kaart met wit tekstvlak (live) */
+  :global([data-tone="light"]) .project { gap: 0; border-radius: var(--radius); overflow: hidden; background: var(--white); }
+  :global([data-tone="light"]) .project .media { border-radius: 0; }
+  :global([data-tone="light"]) .project .body { padding: var(--space-s) var(--space-m) var(--space-m); }
+  :global([data-tone="light"]) .project .title { font-size: var(--step-2); }
+
   /* Module: licht kaartvlak, beeld 'contain' */
   .module { padding: var(--space-s); border-radius: var(--radius); background: var(--color-surface); }
   .module .media { background: transparent; }
@@ -100,8 +106,10 @@ const source = stegaClean(item.linkUrl);
   .news .source { position: relative; z-index: 1; color: var(--color-fg); }
 
   /* Teamlid */
-  .person { padding: var(--space-xs); border-radius: var(--radius); background: var(--color-surface); gap: var(--space-xs); }
-  .person .title { font-size: var(--step-0); font-weight: 500; letter-spacing: 0; }
+  .person { border-radius: var(--radius); background: var(--color-surface); gap: 0; overflow: hidden; }
+  .person .media { border-radius: 0; aspect-ratio: 5 / 7; }
+  .person .body { padding: var(--space-s) var(--space-s) var(--space-m); }
+  .person .title { font-size: var(--step-1); }
   .email { font-size: var(--step--1); }
   .email a { color: var(--color-muted); text-decoration: none; }
   .email a:hover { text-decoration: underline; }

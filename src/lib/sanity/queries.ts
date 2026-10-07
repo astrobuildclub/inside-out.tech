@@ -54,13 +54,14 @@ export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug]
   _id, title, "slug": slug.current, image, excerpt, content, address, period, client, media, seo,
   // Zwakke verwijzingen naar ongepubliceerde modules geven null: die vallen weg.
   "modules": modules[defined(@->slug.current)]->{ title, "slug": slug.current },
-  "cta": *[_type == "page" && slug.current == "projecten"][0].sections[_type == "cta"][0]{ ..., link${LINK} }
+  // Live tonen project- en moduledetail dezelfde CTA als de nieuwspagina
+  "cta": *[_type == "page" && slug.current == "nieuws"][0].sections[_type == "cta"][0]{ ..., link${LINK} }
 }`;
 
 export const MODULE_QUERY = groq`*[_type == "module" && slug.current == $slug][0]{
   _id, title, "slug": slug.current, type, image, excerpt, intro, content, specs, media, seo,
   factsheet${FILE},
-  "cta": *[_type == "page" && slug.current == "plug-play"][0].sections[_type == "cta"][0]{ ..., link${LINK} }
+  "cta": *[_type == "page" && slug.current == "nieuws"][0].sections[_type == "cta"][0]{ ..., link${LINK} }
 }`;
 
 export const NEWS_QUERY = groq`*[_type == "news" && slug.current == $slug][0]{

@@ -59,7 +59,7 @@ const year = new Date().getFullYear();
         </div>
       )}
       <div class="legal">
-        <p>© {year} {settings.siteName}</p>
+        <p>{year} © {settings.siteName} —</p>
         <ul role="list">
           {termsUrl && <li><a href={termsUrl} target="_blank" rel="noopener">{navigation.termsLabel ?? "Alg. voorwaarden"}</a></li>}
           {navigation.privacy && <li><a href={`/${navigation.privacy.slug}`}>{navigation.privacy.title}</a></li>}
@@ -74,7 +74,7 @@ const year = new Date().getFullYear();
 <style>
   .site-footer { padding-block: var(--space-2xl) var(--space-m); }
   .grid { display: grid; gap: var(--space-xl); }
-  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 39rem); align-items: start; } }
+  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 34rem); align-items: start; } }
 
   .home :global(.logo) { inline-size: 10.5rem; block-size: auto; color: var(--white); margin-block-end: var(--space-l); }
   .home { display: inline-block; }
@@ -105,10 +105,12 @@ const year = new Date().getFullYear();
   .cta :global(.button) { justify-self: start; }
   .legal {
     grid-column: 1 / -1;
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2xs) var(--space-m);
-    font-size: 0.8125rem;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25em 0.75em;
+    font-size: 0.75rem;
   }
-  .legal ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-s); }
+  .legal ul { display: contents; }
+  /* "identity & website by …" rechts, zoals live */
+  .legal li:last-child { margin-inline-start: auto; }
   .legal a, .linklike { color: inherit; text-decoration: none; }
   .legal a:hover, .linklike:hover { text-decoration: underline; }
   .linklike { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }

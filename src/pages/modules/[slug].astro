@@ -26,9 +26,6 @@ const crumbs = [{ label: "Home", href: "/" }, { label: "Plug & Play", href: "/pl
     <div class="wrapper head">
       {mod.image?.asset && <div class="media"><SanityImg image={mod.image} sizes="(min-width: 62rem) 45vw, 100vw" priority /></div>}
       <div class="titles">
-        <nav aria-label="Kruimelpad" class="crumbs">
-          <ol role="list">{crumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}</ol>
-        </nav>
         <h1>{mod.title}</h1>
         {mod.type && <p class="type">{mod.type}</p>}
         {mod.intro && <p class="intro">{mod.intro}</p>}
@@ -61,7 +58,7 @@ const crumbs = [{ label: "Home", href: "/" }, { label: "Plug & Play", href: "/pl
 
 <style>
   .detail { display: grid; gap: var(--space-xl); align-items: start; }
-  @media (min-width: 62rem) { .detail { grid-template-columns: 1fr 22rem; gap: var(--space-2xl); } .specs { position: sticky; inset-block-start: 6rem; } }
+  @media (min-width: 62rem) { .detail { grid-template-columns: 6fr 4fr; gap: var(--space-2xl); } .specs { position: sticky; inset-block-start: 7rem; max-inline-size: 26rem; } }
   .content { display: grid; gap: var(--space-l); }
   .head { display: grid; gap: var(--space-xl); align-items: center; }
   @media (min-width: 62rem) { .head { grid-template-columns: 1fr 1fr; } }
@@ -69,11 +66,13 @@ const crumbs = [{ label: "Home", href: "/" }, { label: "Plug & Play", href: "/pl
   .head .media :global(img) { inline-size: 100%; block-size: 100%; object-fit: contain; }
   .titles { display: grid; gap: var(--space-xs); }
   h1 { font-size: var(--step-4); }
-  .type { color: var(--color-accent); font-weight: 500; font-size: var(--step--1); }
+  .type { color: var(--blue); font-weight: 700; font-size: var(--step--1); }
   .intro { max-inline-size: 48ch; }
   .crumbs ol { display: flex; flex-wrap: wrap; gap: 0.5em; font-size: var(--step--1); color: var(--color-muted); }
   .crumbs li + li::before { content: "›"; margin-inline-end: 0.5em; }
   .crumbs a { color: inherit; }
-  .specs { display: grid; gap: var(--space-s); padding: var(--space-m); justify-items: start; }
+  /* Specificaties als blauwe kaart (live) */
+  .specs { display: grid; gap: var(--space-s); padding: var(--space-m); justify-items: start; background: var(--blue); color: var(--white); }
   .specs h2 { font-size: var(--step-2); }
+  .specs .button { --btn-bg: var(--lemon); --btn-fg: var(--planet); }
 </style>

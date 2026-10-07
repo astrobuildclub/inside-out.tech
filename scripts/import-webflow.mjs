@@ -396,25 +396,19 @@ async function importPages() {
         theme: "white",
       }),
       section("textMedia", {
-        title: "Wat we leveren",
         body: pt(
-          "<ul><li>Innovatieve modules voor duurzame energieoplossingen</li><li>BIM-systeemontwerp afgestemd op gebouwstructuur en renovatieopgave</li><li>Technische ondersteuning in planfase, aanbesteding en uitvoering</li><li>Slimme Plug &amp; Play modules met warmtepomp, ventilatie, afgifte en PV-opwekking</li><li>Meer leefruimte, minder overlast, kortere doorlooptijd</li></ul>",
-        ),
-        bodySecondary: pt(
-          "<p>Door installaties naar gevel of dak te verplaatsen ontstaat meer leefruimte in de woning, minder hinder tijdens uitvoering en een efficiënter renovatieproces. Zo dragen onze Plug &amp; Play oplossingen bij aan duurzame waarde voor huurders, opdrachtgevers én uitvoerende partners.</p>",
+          "<h3>Wat we leveren</h3><ul><li>Innovatieve modules voor duurzame energieoplossingen</li><li>BIM-systeemontwerp afgestemd op gebouwstructuur en renovatieopgave</li><li>Technische ondersteuning in planfase, aanbesteding en uitvoering</li><li>Slimme Plug &amp; Play modules met warmtepomp, ventilatie, afgifte en PV-opwekking</li><li>Meer leefruimte, minder overlast, kortere doorlooptijd</li></ul><p>Door installaties naar gevel of dak te verplaatsen ontstaat meer leefruimte in de woning, minder hinder tijdens uitvoering en een efficiënter renovatieproces. Zo dragen onze Plug &amp; Play oplossingen bij aan duurzame waarde voor huurders, opdrachtgevers én uitvoerende partners.</p><h3>Het team</h3><p>Inside Out is een team van jonge, technische ontwikkelaars met een gedeelde missie: de energietransitie uitvoerbaar maken met Plug &amp; Play energiesystemen. We combineren expertise in bouwkunde, installatietechniek en systeemintegratie met een scherpe focus op praktische toepasbaarheid. Samen met strategische partners en installatiebedrijven werken we nauw samen met opdrachtgevers die écht willen verduurzamen.</p>",
         ),
         theme: "white",
       }),
-      section("collectionList", {
-        collection: "person",
-        title: "Het team",
-        intro:
-          "Inside Out is een team van jonge, technische ontwikkelaars met een gedeelde missie: de energietransitie uitvoerbaar maken met Plug & Play energiesystemen. We combineren expertise in bouwkunde, installatietechniek en systeemintegratie met een scherpe focus op praktische toepasbaarheid.",
-        layout: "grid",
-        theme: "white",
-      }),
+      section("collectionList", { collection: "person", layout: "grid", theme: "white" }),
       section("logoMarquee", { clientsTitle: "Opdrachtgevers", partnersTitle: "Partners", theme: "white" }),
-      CTA_ADVIES("Benieuwd wat de modules voor jou kunnen betekenen?"),
+      section("cta", {
+        title: "Benieuwd wat de modules voor jou kunnen betekenen?",
+        text: "Ontdek hoe onze Plug & Play energiesystemen jouw project sneller, voorspelbaarder en effectiever maken",
+        link: link("Plan gratis adviesgesprek", "contact"),
+        theme: "white",
+      }),
     ],
     "Inside Out maakt hoogbouw energiepositief door plug & play modules die ieder huis omtovert naar een comfortabel en zuinig thuis. We brengen installaties vanuit het hart van de woning naar de gevel of het dak.",
   );
@@ -484,11 +478,14 @@ async function importPages() {
         bodySecondary: pt(
           '<p>Om tot compleet gestandaardiseerde systemen te komen worden er criteria gesteld aan het gebouw en de toepassing ervan. Om het systeem op te schalen wordt er een commercieel concept ontwikkeld dat samen met installatiepartners wordt uitgerold in de markt.</p><p>Het eerste concept dat wordt uitgerold is <a href="https://www.warmeflat.nl/">Warmeflat</a>. Installatiepartners kunnen zich aanmelden om samen projecten te realiseren.</p>',
         ),
-        image: await image("images/inpasbaarheid.png", { alt: "Schema van het inpasbaarheidsniveau van Plug & Play-systemen" }),
+        theme: "white",
+      }),
+      section("textMedia", {
+        image: await image("images/inpasbaarheid.png", { alt: "Schema: Plug & Play op maat en gestandaardiseerd, van lage tot hoge mate van inpasbaarheid" }),
         theme: "green",
       }),
       section("uspGrid", {
-        theme: "green",
+        theme: "white",
         items: withKeys([
           { title: "Prefab en direct inzetbaar zonder engineering", text: "Gestandaardiseerd ontwerp op basis van vergelijkbare woningtypes. Geen extra tekenwerk of complexe technische voorbereiding nodig." },
           { title: "Snelle installatie met minimale overlast", text: "De Plug & Play modules worden zoveel mogelijk buiten de woning geplaatst. Minimale ingrepen binnen zorgen dat bewoners thuis kunnen blijven tijdens de uitvoering." },
@@ -497,7 +494,6 @@ async function importPages() {
         ]),
       }),
       section("steps", {
-        title: "Stappenplan voor installatiepartners",
         list: "installatiepartners",
         image: await image("images/Bravo-2.0-sq.png", { alt: "Plug & Play-module io Bravo 2.0" }),
         imagePosition: "left",
@@ -518,10 +514,10 @@ async function importPages() {
           "<p>Wij ontwikkelen energiesystemen die de verduurzaming van vastgoed versnellen en voorspelbaar maken. Door bouwkunde en installatietechniek vanaf de planfase te combineren ontstaat een oplossing die direct toepasbaar is zonder ingrijpende aanpassingen.</p><p>Hierdoor kunnen wij duidelijkheid geven op het gebied van installaties &amp; energie en de kosten, risico’s en prestaties hiervan.</p><p>Dit doen wij binnen RGS-trajecten waar wij aanhaken vanaf de initiatieffase in samenwerking met de strategische partner, of binnen tendertrajecten.</p>",
         ),
         image: await image("images/aanpak.png", { alt: "Schema van de aanpak van Inside Out" }),
-        theme: "green",
+        theme: "white",
       }),
       section("uspGrid", {
-        theme: "green",
+        theme: "white",
         items: withKeys([
           { title: "Inpasbaar in planvorming en voor tendertrajecten", text: "Ontwikkelen samen met ketenpartners, binnen RGS-trajecten en tenders, met planvorming tot en met de beheerfase." },
           { title: "Van ambitie naar technisch systeemontwerp", text: "Doelen worden in de planfase vertaald naar een Plug & Play energiesysteem dat technisch aansluit op gebouwstructuur en renovatie-eisen." },
@@ -676,6 +672,14 @@ await mkdir(CACHE, { recursive: true });
 await importCollections();
 await importPages();
 await importSingletons();
+
+const ONLY = process.argv.find((a) => a.startsWith("--only="))?.slice(7).split(",");
+if (ONLY) {
+  const keep = docs.filter((d) => ONLY.includes(d._type));
+  docs.length = 0;
+  docs.push(...keep);
+  console.log(`Alleen: ${ONLY.join(", ")} (${docs.length} documenten)`);
+}
 
 if (DRY) {
   await writeFile(join(CACHE, "dry-run.json"), JSON.stringify(docs, null, 2));
