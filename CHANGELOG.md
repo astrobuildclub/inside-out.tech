@@ -20,7 +20,7 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 
 ### Gewijzigd
 - Dark mode voorlopig uit: de site is altijd licht (`color-scheme: light`). De tokens houden hun `light-dark()`-waarden, zodat dark mode later terug kan.
-- Containerbreedte 1180px (`--container-width`) voor header, footer en secties.
+- Containerbreedte max. 1344px (`--container-width`) voor header, footer en secties.
 - Witruimte: alleen twee secties met dezelfde achtergrond na elkaar delen hun ruimte (de content plakte tegen de projectkop).
 - Uit de vergelijking met live: modulekaart blauw bij hover, feitenblok projecten breder met "Adres" en blauwe pill, kruimelpad zonder onderstreping, actief menu-item als pill, footer met logo bovenaan, CTA-foto op lichtblauw vlak (op wit), grotere titel in de lemon-CTA, neutrale overlay over kopfoto's, "contact" en "*Samen* … *duurzaam*" zoals live.
 - Live (inside-out.tech) is de bron: gepubliceerde content gelijk aan live (stappenplan installatiepartners, RGS-fase 3, io Charlie/Echo gepubliceerd, nieuwsbronnen en -datums, volgorde projecten en team, paginatitels). Waar de testexport afwijkt staat die versie als Sanity-draft.
