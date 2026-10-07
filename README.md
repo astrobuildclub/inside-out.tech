@@ -11,7 +11,7 @@
 | **Live** | https://inside-out.tech (nog Webflow) |
 | **Netlify** | team All This, site TODO |
 | **CMS** | Sanity project `cf1ukp64`, dataset `production`, Studio op `/admin` |
-| **Repo** | TODO: `github.com/astrobuildclub/inside-out.tech` (nog alleen lokaal) |
+| **Repo** | [github.com/astrobuildclub/inside-out.tech](https://github.com/astrobuildclub/inside-out.tech) (private) |
 | **Notion** | TODO |
 
 ## Stack
