@@ -1,0 +1,73 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/sections/PageHeader.astro";
+import RichText from "../../components/RichText.astro";
+import MediaGallery from "../../components/MediaGallery.astro";
+import Cta from "../../components/sections/Cta.astro";
+import { loadQuery } from "../../lib/sanity/load-query";
+import { PROJECT_QUERY, type Project } from "../../lib/sanity/queries";
+import { breadcrumbJsonLd } from "../../lib/seo";
+
+const { data: project } = await loadQuery<Project | null>({ query: PROJECT_QUERY, params: { slug: Astro.params.slug ?? "" } });
+if (!project) return Astro.rewrite("/404");
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Projecten", href: "/projecten" },
+  { label: project.title },
+];
+const facts = [
+  { label: "Locatie", value: project.address },
+  { label: "Looptijd", value: project.period },
+  { label: "Opdrachtgever", value: project.client },
+].filter((f) => f.value);
+---
+<BaseLayout
+  title={project.title}
+  seo={project.seo}
+  fallbackDescription={project.excerpt}
+  fallbackImage={project.image}
+  jsonLd={[breadcrumbJsonLd([{ name: "Projecten", path: "/projecten" }, { name: project.title, path: Astro.url.pathname }], Astro.site!)]}
+>
+  <PageHeader _type="pageHeader" _key="header" title={project.title} image={project.image} breadcrumbs={crumbs} theme="green" />
+
+  <section class="section" data-theme="white">
+    <div class="wrapper detail">
+      <aside class="facts" aria-label="Projectgegevens">
+        {facts.length > 0 && (
+          <dl>{facts.map((f) => (<><dt>{f.label}</dt><dd>{f.value}</dd></>))}</dl>
+        )}
+        {project.modules?.length ? (
+          <div>
+            <h2 class="facts-title">Gebruikte producten</h2>
+            <ul role="list" class="pills">
+              {project.modules.map((m) => <li><a href={`/plug-play/${m.slug}`}>{m.title}</a></li>)}
+            </ul>
+          </div>
+        ) : null}
+      </aside>
+      <div class="content">
+        {project.excerpt && <p class="lead">{project.excerpt}</p>}
+        <RichText value={project.content} />
+      </div>
+    </div>
+  </section>
+
+  <MediaGallery media={project.media} label={`Beelden van ${project.title}`} />
+  {project.cta && <Cta {...project.cta} />}
+</BaseLayout>
+
+<style>
+  .detail { display: grid; gap: var(--space-xl); }
+  @media (min-width: 62rem) { .detail { grid-template-columns: 18rem 1fr; gap: var(--space-2xl); } }
+  .facts { display: grid; gap: var(--space-l); align-content: start; }
+  dl { display: grid; gap: var(--space-3xs); }
+  dt { font-size: var(--step--1); color: var(--color-accent); font-weight: 500; }
+  dd + dt { margin-block-start: var(--space-xs); }
+  .facts-title { font-size: var(--step--1); color: var(--color-accent); letter-spacing: 0; margin-block-end: var(--space-2xs); }
+  .pills { display: flex; flex-wrap: wrap; gap: var(--space-3xs); }
+  .pills a { display: inline-block; padding: 0.35em 0.9em; border-radius: var(--radius-pill); background: var(--color-surface); text-decoration: none; font-size: var(--step--1); }
+  .pills a:hover { background: var(--lemon); color: var(--planet); }
+  .content { display: grid; gap: var(--space-m); }
+  .lead { font-size: var(--step-1); line-height: var(--leading-snug); max-inline-size: var(--measure); }
+</style>

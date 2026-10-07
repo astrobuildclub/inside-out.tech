@@ -1,0 +1,95 @@
+/*
+ * Design-tokens Inside Out. Afgeleid van het Webflow-design (styleguide/*.html in de export).
+ * Typografie en ruimte: utopia-core-scss. Kleur: OKLCH, licht/donker via light-dark().
+ *
+ * Type: https://utopia.fyi/type/calculator?c=360,16,1.2,1440,18,1.333,8,3
+ * Space: https://utopia.fyi/space/calculator?c=360,16,1.2,1440,18,1.333,8,3
+ */
+@use 'utopia-core-scss/src/utopia' as utopia;
+
+:root {
+  color-scheme: light dark;
+  interpolate-size: allow-keywords;
+
+  /* Typografie */
+  --font-sans: 'Haffer SQ', ui-sans-serif, system-ui, sans-serif;
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --tracking-tight: -0.03em;
+  --measure: 62ch;
+
+  @include utopia.generateTypeScale((
+    'minWidth': 360,
+    'maxWidth': 1440,
+    'minFontSize': 16,
+    'maxFontSize': 18,
+    'minTypeScale': 1.2,
+    'maxTypeScale': 1.333,
+    'positiveSteps': 6,
+    'negativeSteps': 2,
+    'prefix': 'step-',
+    'relativeTo': 'viewport-width',
+  ));
+
+  @include utopia.generateSpaceScale((
+    'minWidth': 360,
+    'maxWidth': 1440,
+    'minSize': 16,
+    'maxSize': 18,
+    'positiveSteps': (1.5, 2, 3, 4, 6, 8),
+    'negativeSteps': (0.75, 0.5, 0.25),
+    'customSizes': ('s-l', 'm-xl', 'l-2xl', 'xl-3xl', '2xl-4xl'),
+    'prefix': 'space-',
+    'relativeTo': 'viewport-width',
+  ));
+
+  /* Layout (breakout-grid, zie layout.css). Webflow: max-width 90rem, page padding 3rem. */
+  --gutter: var(--space-s-l);
+  --content-width: 46rem;
+  --popout-width: 6rem;
+  --feature-width: 16rem;
+  --section-space: var(--space-xl-3xl);
+
+  /* Vormen & beweging */
+  --radius-s: 0.5rem;
+  --radius: 1rem;
+  --radius-pill: 100vw;
+  --border-width: 1.5px;
+  --duration: 250ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Merkkleuren (vast, niet afhankelijk van licht/donker) */
+  --lemon: oklch(93.1% 0.229 123.1);    /* #CCFF00 Fluor Lemon Zest */
+  --leaf: oklch(52.4% 0.106 167.9);     /* #027D5E Fresh Leaf */
+  --planet: oklch(33.9% 0.062 178.5);   /* #004238 Keepin' the Planet Green */
+  --planet-deep: oklch(27% 0.05 178.5);
+  --blue: oklch(52.1% 0.267 269.5);     /* #3645FF System Shock Blue */
+  --ink: oklch(19.7% 0.007 229.3);      /* #121618 Charging Cable Black */
+  --concrete: oklch(93.4% 0.005 95.1);  /* #EAE9E5 Soft Concrete */
+  --white: oklch(100% 0 0);
+
+  /* Rollen voor de pagina; secties overschrijven ze via [data-theme] in themes.css */
+  --color-bg: light-dark(var(--white), var(--ink));
+  --color-surface: light-dark(var(--concrete), oklch(25% 0.01 200));
+  --color-fg: light-dark(var(--planet), var(--concrete));
+  --color-muted: light-dark(oklch(33.9% 0.062 178.5 / 0.75), oklch(93.4% 0.005 95.1 / 0.72));
+  --color-line: light-dark(oklch(33.9% 0.062 178.5 / 0.2), oklch(93.4% 0.005 95.1 / 0.2));
+  --color-accent: light-dark(var(--leaf), var(--lemon));
+  --color-highlight: var(--lemon);
+  --color-focus: light-dark(var(--blue), var(--lemon));
+
+  /* Knoppen: primair = lemon, secundair = omlijnd */
+  --btn-bg: var(--lemon);
+  --btn-fg: var(--planet);
+  --btn-bg-hover: var(--planet);
+  --btn-fg-hover: var(--white);
+  --btn-line: var(--color-accent);
+}
+
+:root[data-theme='light'] { color-scheme: light; }
+:root[data-theme='dark'] { color-scheme: dark; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --duration: 0ms; }
+}

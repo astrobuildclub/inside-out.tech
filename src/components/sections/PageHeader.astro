@@ -1,0 +1,39 @@
+---
+import Section from "./Section.astro";
+import SanityImg from "../SanityImg.astro";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "pageHeader" }> & { breadcrumbs?: { label: string; href?: string }[] };
+const { eyebrow, title, intro, image, theme = "green", breadcrumbs } = Astro.props;
+---
+<Section theme={theme} class:list={["page-header", { "has-image": image?.asset }]}>
+  {image?.asset && <div class="bg"><SanityImg {image} sizes="100vw" priority alt="" /></div>}
+  <div class="wrapper inner" data-reveal>
+    {breadcrumbs?.length ? (
+      <nav aria-label="Kruimelpad" class="crumbs">
+        <ol role="list">
+          {breadcrumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+        </ol>
+      </nav>
+    ) : null}
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <h1>{title}</h1>
+    {intro && <p class="intro">{intro}</p>}
+    <slot />
+  </div>
+</Section>
+
+<style>
+  .page-header { position: relative; isolation: isolate; padding-block: var(--space-2xl) var(--space-xl); }
+  .page-header.has-image { min-block-size: clamp(20rem, 45vh, 32rem); display: grid; align-items: end; }
+  .bg { position: absolute; inset: 0; z-index: -1; }
+  .bg :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(33.9% 0.062 178.5 / 0.95), oklch(33.9% 0.062 178.5 / 0.35)); }
+  .inner { display: grid; gap: var(--space-s); }
+  h1 { max-inline-size: 22ch; }
+  .eyebrow { color: var(--color-accent); }
+  .intro { color: var(--color-muted); max-inline-size: 52ch; }
+  .crumbs ol { display: flex; flex-wrap: wrap; gap: 0.5em; font-size: var(--step--1); color: var(--color-muted); }
+  .crumbs li + li::before { content: "›"; margin-inline-end: 0.5em; }
+  .crumbs a { color: inherit; }
+</style>

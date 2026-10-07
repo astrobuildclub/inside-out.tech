@@ -1,0 +1,21 @@
+---
+// Knop op basis van een Sanity link-object (intern document, URL, mailto/tel).
+import { stegaClean } from "@sanity/client/stega";
+import Icon from "./Icon.astro";
+import { isExternal, linkHref } from "../lib/links";
+import type { Link } from "../lib/sanity/queries";
+
+interface Props { link?: Link | null; style?: Link["style"]; arrow?: boolean; class?: string }
+const { link, arrow, class: className } = Astro.props;
+const href = linkHref(link);
+const style = stegaClean(Astro.props.style ?? link?.style ?? "primary");
+const external = isExternal(href);
+const showArrow = arrow ?? style !== "text";
+---
+{link?.label && href && (
+  <a class:list={["button", className]} data-style={style} href={href} {...(external && { target: "_blank", rel: "noopener" })}>
+    <span>{link.label}</span>
+    {showArrow && <Icon name="arrow" />}
+    {external && <span class="visually-hidden">(opent in nieuw venster)</span>}
+  </a>
+)}

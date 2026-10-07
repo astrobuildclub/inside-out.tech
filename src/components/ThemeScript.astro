@@ -1,0 +1,21 @@
+---
+/*
+  Zet in <head> van je BaseLayout, vóór je CSS: <ThemeScript />
+  Leest een eerder gekozen thema uit localStorage en zet het vóór de eerste paint,
+  zodat er geen flits van het verkeerde thema is. Zonder keuze: niets doen, het systeem bepaalt.
+  Met <ClientRouter /> (view transitions) zetten we het opnieuw na elke paginawissel.
+*/
+---
+<script is:inline>
+  (() => {
+    const apply = () => {
+      try {
+        const t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+        else delete document.documentElement.dataset.theme;
+      } catch {}
+    };
+    apply();
+    document.addEventListener("astro:after-swap", apply);
+  })();
+</script>

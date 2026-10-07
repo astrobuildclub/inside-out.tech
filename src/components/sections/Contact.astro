@@ -1,0 +1,133 @@
+---
+// Contactformulier (Netlify Forms, honeypot i.p.v. reCAPTCHA) + contactgegevens uit de site-instellingen.
+// Met JS: verzenden via fetch en melding in de pagina. Zonder JS: gewone POST, Netlify toont dan zijn eigen bedankpagina.
+import Section from "./Section.astro";
+import SanityImg from "../SanityImg.astro";
+import { telHref } from "../../lib/links";
+import { getSettings } from "../../lib/sanity/settings";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "contact" }>;
+const { formTitle, successMessage, openingHours, mapImage, mapUrl } = Astro.props;
+const settings = await getSettings();
+const a = settings.address;
+---
+<Section theme="white">
+  <div class="wrapper grid">
+    <form name="contact" method="POST" action="/__forms.html" data-contact-form novalidate>
+      {formTitle && <h2>{formTitle}</h2>}
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="page" value={Astro.url.pathname} />
+      <p class="hp" aria-hidden="true"><label>Niet invullen <input name="bedrijfsfax" tabindex="-1" autocomplete="off" /></label></p>
+
+      <div class="field">
+        <label for="cf-name">Naam</label>
+        <input id="cf-name" name="name" type="text" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for="cf-email">E-mail <span aria-hidden="true">*</span></label>
+        <input id="cf-email" name="email" type="email" autocomplete="email" required aria-describedby="cf-email-error" />
+        <p class="error" id="cf-email-error" hidden>Vul een geldig e-mailadres in.</p>
+      </div>
+      <div class="field">
+        <label for="cf-phone">Telefoon <span aria-hidden="true">*</span></label>
+        <input id="cf-phone" name="phone" type="tel" autocomplete="tel" required aria-describedby="cf-phone-error" />
+        <p class="error" id="cf-phone-error" hidden>Vul je telefoonnummer in.</p>
+      </div>
+      <div class="field">
+        <label for="cf-message">Bericht <span aria-hidden="true">*</span></label>
+        <textarea id="cf-message" name="message" rows="6" required aria-describedby="cf-message-error"></textarea>
+        <p class="error" id="cf-message-error" hidden>Vul een bericht in.</p>
+      </div>
+      <p class="muted small">Velden met * zijn verplicht. We gebruiken je gegevens alleen om contact met je op te nemen.</p>
+      <button type="submit" class="button" data-style="primary">Verstuur</button>
+      <p class="status" role="status" data-status data-success={successMessage ?? "Bedankt! We nemen zo snel mogelijk contact met je op."}></p>
+    </form>
+
+    <aside class="info" aria-label="Contactgegevens">
+      {mapImage?.asset && (
+        <a href={mapUrl} class="map media-frame" target="_blank" rel="noopener">
+          <SanityImg image={mapImage} sizes="(min-width: 62rem) 35vw, 100vw" alt="" />
+          <span class="visually-hidden">Bekijk de locatie op Google Maps (opent in nieuw venster)</span>
+        </a>
+      )}
+      <dl>
+        {a?.street && (<><dt>Adres</dt><dd>{settings.companyName && <>{settings.companyName}<br /></>}{a.street}<br />{a.postalCode} {a.city}</dd></>)}
+        {openingHours && (<><dt>Bereikbaarheid</dt><dd>{openingHours}</dd></>)}
+        {settings.telephone && (<><dt>Telefoon</dt><dd><a href={telHref(settings.telephone)}>{settings.telephone}</a></dd></>)}
+        {settings.email && (<><dt>E-mail</dt><dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd></>)}
+      </dl>
+    </aside>
+  </div>
+</Section>
+
+<script>
+  function init() {
+    const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
+    if (!form) return;
+    const status = form.querySelector<HTMLElement>("[data-status]")!;
+    const fields = [...form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("[required]")];
+
+    const check = (el: HTMLInputElement | HTMLTextAreaElement) => {
+      const ok = el.checkValidity();
+      el.setAttribute("aria-invalid", String(!ok));
+      const err = document.getElementById(`${el.id}-error`);
+      if (err) err.hidden = ok;
+      return ok;
+    };
+    fields.forEach((el) => el.addEventListener("blur", () => el.value && check(el)));
+
+    form.onsubmit = async (event) => {
+      event.preventDefault();
+      const invalid = fields.filter((el) => !check(el));
+      if (invalid.length) return invalid[0].focus();
+
+      const button = form.querySelector<HTMLButtonElement>("button[type=submit]")!;
+      button.disabled = true;
+      status.textContent = "Bezig met verzenden…";
+      try {
+        const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+        const res = await fetch(form.action, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        status.textContent = status.dataset.success ?? "";
+        status.dataset.state = "ok";
+      } catch {
+        status.textContent = "Er ging iets mis bij het verzenden. Probeer het opnieuw of mail ons direct.";
+        status.dataset.state = "error";
+      } finally {
+        button.disabled = false;
+      }
+    };
+  }
+  document.addEventListener("astro:page-load", init);
+</script>
+
+<style>
+  .grid { display: grid; gap: var(--space-2xl); }
+  @media (min-width: 62rem) { .grid { grid-template-columns: 3fr 2fr; } }
+  form { display: grid; gap: var(--space-s); align-content: start; justify-items: start; }
+  h2 { font-size: var(--step-3); }
+  .field { display: grid; gap: var(--space-3xs); inline-size: 100%; }
+  label { font-weight: 500; font-size: var(--step--1); }
+  input, textarea {
+    inline-size: 100%;
+    padding: var(--space-xs) var(--space-s);
+    border: var(--border-width) solid var(--color-line);
+    border-radius: var(--radius-s);
+    background: var(--color-surface);
+  }
+  input:focus-visible, textarea:focus-visible { border-color: var(--color-focus); }
+  [aria-invalid="true"] { border-color: oklch(55% 0.2 25); }
+  .error { color: oklch(50% 0.2 25); font-size: var(--step--1); }
+  .small { font-size: var(--step--1); }
+  .hp { position: absolute; inset-inline-start: -100vw; }
+  .status:empty { display: none; }
+  .status { padding: var(--space-xs) var(--space-s); border-radius: var(--radius-s); background: var(--color-surface); }
+  .status[data-state="ok"] { background: var(--lemon); color: var(--planet); }
+  .info { display: grid; gap: var(--space-l); align-content: start; }
+  .map { display: block; aspect-ratio: 4 / 3; }
+  dl { display: grid; gap: var(--space-2xs); }
+  dt { font-weight: 500; color: var(--color-accent); font-size: var(--step--1); }
+  dd + dt { margin-block-start: var(--space-s); }
+</style>

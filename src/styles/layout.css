@@ -1,0 +1,30 @@
+/*
+ * Breakout-grid. Kinderen staan standaard in `content`; met een klasse breken ze uit.
+ * Mapping op het `breedte`-veld van blokken: content | popout | feature | full.
+ *
+ *  full ┃ feature ┃ popout ┃      content      ┃ popout ┃ feature ┃ full
+ */
+.layout {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [feature-start] minmax(0, var(--feature-width))
+    [popout-start] minmax(0, var(--popout-width))
+    [content-start] min(var(--content-width), 100% - var(--gutter) * 2) [content-end]
+    minmax(0, var(--popout-width)) [popout-end]
+    minmax(0, var(--feature-width)) [feature-end]
+    minmax(var(--gutter), 1fr) [full-end];
+}
+.layout > * { grid-column: content; }
+.layout > .popout { grid-column: popout; }
+.layout > .feature { grid-column: feature; }
+.layout > .full { grid-column: full; }
+
+/* Verticaal ritme */
+.flow > * + * { margin-block-start: var(--flow-space, 1em); }
+
+/* Brede container voor header/footer/rasters */
+.wrapper {
+  inline-size: min(100% - var(--gutter) * 2, calc(var(--content-width) + var(--popout-width) * 2 + var(--feature-width) * 2));
+  margin-inline: auto;
+}

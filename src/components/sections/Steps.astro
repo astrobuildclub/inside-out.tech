@@ -1,0 +1,61 @@
+---
+// Stappen als uitklapbare <details> (vervangt de Finsweet-accordion). Geen JS nodig.
+import Section from "./Section.astro";
+import RichText from "../RichText.astro";
+import SanityImg from "../SanityImg.astro";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "steps" }>;
+const { title, intro, image, items = [], theme, _key } = Astro.props;
+---
+{items.length > 0 && (
+  <Section {theme}>
+    <div class:list={["wrapper grid", { "has-image": image?.asset }]}>
+      <div class="text">
+        {title && <h2>{title}</h2>}
+        <RichText value={intro} />
+        <ol role="list" class="steps">
+          {items.map((step, i) => (
+            <li>
+              <details name={`steps-${_key}`} open={i === 0}>
+                <summary>
+                  <span class="num" aria-hidden="true">{String(step.number).padStart(2, "0")}</span>
+                  <span class="label"><span class="visually-hidden">Stap {step.number}: </span>{step.title}</span>
+                  <span class="marker" aria-hidden="true"></span>
+                </summary>
+                <RichText value={step.description} class="answer" />
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+      {image?.asset && <div class="media media-frame"><SanityImg {image} sizes="(min-width: 62rem) 40vw, 100vw" /></div>}
+    </div>
+  </Section>
+)}
+
+<style>
+  .grid { display: grid; gap: var(--space-xl); align-items: start; }
+  @media (min-width: 62rem) { .grid.has-image { grid-template-columns: 1fr 1fr; } .media { position: sticky; inset-block-start: 6rem; } }
+  .text { display: grid; gap: var(--space-m); }
+  h2 { font-size: var(--step-3); }
+  .steps { border-block-start: 1px solid var(--color-line); }
+  .steps > li { border-block-end: 1px solid var(--color-line); }
+  summary {
+    display: grid; grid-template-columns: 3rem 1fr 1.5rem; gap: var(--space-s); align-items: center;
+    padding-block: var(--space-s);
+    font-size: var(--step-1); font-weight: 500;
+    cursor: pointer; list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .num { color: var(--color-accent); font-size: var(--step-0); }
+  .marker { position: relative; block-size: 1.5rem; }
+  .marker::before, .marker::after { content: ""; position: absolute; inset: 50% 0 auto; block-size: 2px; background: currentColor; transition: rotate var(--duration) var(--ease); }
+  .marker::after { rotate: 90deg; }
+  details[open] .marker::after { rotate: 0deg; }
+  details :global(.answer) { padding: 0 0 var(--space-m) calc(3rem + var(--space-s)); }
+  @media (prefers-reduced-motion: no-preference) {
+    details::details-content { block-size: 0; overflow: clip; transition: block-size var(--duration) var(--ease), content-visibility var(--duration) allow-discrete; }
+    details[open]::details-content { block-size: auto; }
+  }
+</style>

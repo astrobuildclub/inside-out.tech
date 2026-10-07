@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionRenderer from "../components/SectionRenderer.astro";
+import { loadQuery } from "../lib/sanity/load-query";
+import { PAGE_QUERY, type Page } from "../lib/sanity/queries";
+
+const { data: page } = await loadQuery<Page | null>({ query: PAGE_QUERY, params: { slug: "home" } });
+if (!page) return new Response("Homepage ontbreekt: maak in de Studio een pagina met slug 'home'.", { status: 500 });
+---
+<BaseLayout title={page.title} seo={page.seo} isHome>
+  <SectionRenderer sections={page.sections} />
+</BaseLayout>

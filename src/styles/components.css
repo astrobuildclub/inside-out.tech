@@ -1,0 +1,60 @@
+/* Gedeelde bouwstenen; componentspecifieke stijl staat scoped in de .astro-bestanden. */
+
+.section { padding-block: var(--section-space); }
+.section + .section[data-theme='white'], .section[data-theme='white'] + .section[data-theme='white'] { padding-block-start: 0; }
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  min-block-size: 2.75rem; /* WCAG 2.5.8 doelgrootte */
+  padding: var(--space-2xs) var(--space-s);
+  border: var(--border-width) solid var(--btn-bg);
+  border-radius: var(--radius-pill);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 500;
+  font-size: var(--step--1);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+.button:hover { background: var(--btn-bg-hover); border-color: var(--btn-bg-hover); color: var(--btn-fg-hover); }
+.button svg { inline-size: 1.1em; block-size: 1.1em; transition: transform var(--duration) var(--ease); }
+.button:hover svg { transform: translateX(3px); }
+
+.button[data-style='secondary'] { background: transparent; color: var(--color-fg); border-color: var(--btn-line); }
+.button[data-style='secondary']:hover { background: var(--btn-bg-hover); border-color: var(--btn-bg-hover); color: var(--btn-fg-hover); }
+
+.button[data-style='text'] {
+  padding-inline: 0;
+  border: 0;
+  background: none;
+  color: var(--color-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+}
+
+.buttons { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+
+.card {
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.media-frame { border-radius: var(--radius); overflow: hidden; background: var(--color-surface); }
+.media-frame img, .media-frame video { inline-size: 100%; block-size: 100%; object-fit: cover; }
+
+.grid-auto {
+  display: grid;
+  gap: var(--space-m);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--grid-min, 18rem)), 1fr));
+}
+
+/* Rustige fade-in bij in beeld komen (vervangt Webflow IX2). Alleen met JS én zonder reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] { opacity: 0; translate: 0 1.5rem; transition: opacity 600ms var(--ease), translate 600ms var(--ease); }
+  .js [data-reveal].is-visible { opacity: 1; translate: 0 0; }
+}

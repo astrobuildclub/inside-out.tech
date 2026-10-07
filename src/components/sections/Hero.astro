@@ -1,0 +1,86 @@
+---
+// Home-opener: titel met gemarkeerde woorden, knoppen en achtergrondvideo.
+// Video: muted/loop, met pauzeknop (WCAG 2.2.2) en geen autoplay bij reduced motion.
+import Section from "./Section.astro";
+import LinkButton from "../LinkButton.astro";
+import SanityImg from "../SanityImg.astro";
+import Icon from "../Icon.astro";
+import { urlFor } from "../../lib/sanity/image";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "hero" }>;
+const { title, buttons, videoMp4, videoWebm, image } = Astro.props;
+// *woord* → gemarkeerd met de handgetekende lemon-streep
+const parts = title.split("*").map((text, i) => ({ text, highlight: i % 2 === 1 }));
+const poster = image?.asset ? urlFor(image).width(1600).auto("format").quality(70).url() : undefined;
+const mp4 = videoMp4?.asset?.url;
+const webm = videoWebm?.asset?.url;
+---
+<Section theme="green" class="hero">
+  <div class="wrapper grid">
+    <div class="text" data-reveal>
+      <h1 class="title">{parts.map((p) => (p.highlight ? <span class="highlight">{p.text}</span> : p.text))}</h1>
+      {buttons?.length ? (
+        <div class="buttons">{buttons.map((link, i) => <LinkButton {link} style={i === 0 ? "primary" : "secondary"} arrow={i === 0} />)}</div>
+      ) : null}
+    </div>
+    <div class="media media-frame" data-reveal>
+      {mp4 || webm ? (
+        <>
+          <video data-hero-video muted loop playsinline preload="metadata" poster={poster} aria-hidden="true">
+            {webm && <source src={webm} type="video/webm" />}
+            {mp4 && <source src={mp4} type="video/mp4" />}
+          </video>
+          <button type="button" class="video-toggle" data-video-toggle aria-pressed="false">
+            <span data-when="playing"><Icon name="pause" /><span class="visually-hidden">Video pauzeren</span></span>
+            <span data-when="paused"><Icon name="play" /><span class="visually-hidden">Video afspelen</span></span>
+          </button>
+        </>
+      ) : (
+        <SanityImg {image} sizes="(min-width: 62rem) 50vw, 100vw" priority />
+      )}
+    </div>
+  </div>
+</Section>
+
+<script>
+  function init() {
+    const video = document.querySelector<HTMLVideoElement>("[data-hero-video]");
+    const toggle = document.querySelector<HTMLButtonElement>("[data-video-toggle]");
+    if (!video || !toggle) return;
+    const set = (playing: boolean) => {
+      toggle.dataset.state = playing ? "playing" : "paused";
+      toggle.setAttribute("aria-pressed", String(!playing));
+    };
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) video.play().then(() => set(true)).catch(() => set(false));
+    else set(false);
+    toggle.onclick = () => (video.paused ? video.play().then(() => set(true)) : (video.pause(), set(false)));
+  }
+  document.addEventListener("astro:page-load", init);
+</script>
+
+<style>
+  .hero { padding-block: var(--space-l) var(--space-2xl); }
+  .grid { display: grid; gap: var(--space-l); align-items: center; }
+  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr 1fr; } }
+  .title { font-size: var(--step-4); line-height: var(--leading-snug); max-inline-size: 18ch; }
+  .text { display: grid; gap: var(--space-l); }
+  .highlight {
+    padding-block-end: 0.12em;
+    background: url("/marker.svg") no-repeat left bottom / 100% 0.22em;
+  }
+  .media { position: relative; aspect-ratio: 4 / 3; }
+  .media :global(img), .media video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .video-toggle {
+    position: absolute; inset-block-end: var(--space-s); inset-inline-end: var(--space-s);
+    display: grid; place-items: center;
+    inline-size: 2.75rem; block-size: 2.75rem;
+    border: 0; border-radius: var(--radius-pill);
+    background: oklch(0% 0 0 / 0.5); color: var(--white);
+    cursor: pointer;
+  }
+  .video-toggle svg { inline-size: 1rem; block-size: 1rem; }
+  .video-toggle:not([data-state="playing"]) [data-when="playing"],
+  .video-toggle[data-state="playing"] [data-when="paused"] { display: none; }
+</style>

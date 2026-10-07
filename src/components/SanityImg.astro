@@ -1,0 +1,28 @@
+---
+// <img> voor Sanity-beelden met srcset (profiel Website). Hero/LCP: priority.
+import { stegaClean } from "@sanity/client/stega";
+import { focalPoint, imageProps, type SanityImage } from "../lib/sanity/image";
+
+interface Props {
+  image?: SanityImage | null;
+  sizes?: string;
+  aspect?: number;
+  priority?: boolean;
+  alt?: string;
+  class?: string;
+}
+const { image, sizes, aspect, priority = false, class: className } = Astro.props;
+const props = image?.asset ? imageProps(image, { sizes, aspect }) : null;
+const alt = stegaClean(Astro.props.alt ?? image?.alt ?? "");
+---
+{props && (
+  <img
+    {...props}
+    alt={alt}
+    class={className}
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : undefined}
+    decoding="async"
+    style={`object-position: ${focalPoint(image!)}`}
+  />
+)}

@@ -1,0 +1,34 @@
+---
+import Section from "./Section.astro";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "uspGrid" }>;
+const { title, items, theme = "green" } = Astro.props;
+---
+<Section {theme}>
+  <div class="wrapper stack">
+    {title && <h2>{title}</h2>}
+    <ul role="list" class="usps">
+      {items?.map((item) => (
+        <li class="usp" data-reveal>
+          <h3>{item.title}</h3>
+          {item.text && <p>{item.text}</p>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .stack { display: grid; gap: var(--space-l); }
+  h2 { font-size: var(--step-3); }
+  .usps { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .usp {
+    display: grid; gap: var(--space-s); align-content: start;
+    padding: var(--space-l);
+    border-radius: var(--radius);
+    background: var(--lemon);
+    color: var(--planet);
+  }
+  h3 { font-size: var(--step-2); max-inline-size: 18ch; }
+</style>

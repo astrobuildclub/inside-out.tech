@@ -1,0 +1,19 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionRenderer from "../components/SectionRenderer.astro";
+import { loadQuery } from "../lib/sanity/load-query";
+import { PAGE_QUERY, type Page } from "../lib/sanity/queries";
+import type { SanityImage } from "../lib/sanity/image";
+
+const { slug } = Astro.params;
+if (slug === "home") return Astro.redirect("/", 301);
+
+const { data: page } = await loadQuery<Page | null>({ query: PAGE_QUERY, params: { slug: slug ?? "" } });
+if (!page) return Astro.rewrite("/404");
+
+// Beschrijving en deelbeeld terugvallen op de paginakop
+const header = page.sections?.find((s) => s._type === "pageHeader") as { intro?: string; image?: SanityImage } | undefined;
+---
+<BaseLayout title={page.title} seo={page.seo} fallbackDescription={header?.intro} fallbackImage={header?.image}>
+  <SectionRenderer sections={page.sections} />
+</BaseLayout>

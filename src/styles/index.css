@@ -1,0 +1,11 @@
+/* Volgorde van de lagen: later wint. Componentstijlen staan scoped in de .astro-bestanden. */
+@layer reset, tokens, base, layout, themes, components, utilities;
+
+@import './fonts.css' layer(base);
+@import './reset.css' layer(reset);
+@import './tokens.scss' layer(tokens);
+@import './base.css' layer(base);
+@import './layout.css' layer(layout);
+@import './themes.css' layer(themes);
+@import './components.css' layer(components);
+@import './utilities.css' layer(utilities);

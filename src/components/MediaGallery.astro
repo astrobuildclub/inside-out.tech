@@ -1,0 +1,31 @@
+---
+// Beelden van een project, module of nieuwsbericht als carousel, met bijschrift.
+import Carousel from "./Carousel.astro";
+import SanityImg from "./SanityImg.astro";
+import type { SanityImage } from "../lib/sanity/image";
+interface Props { media?: SanityImage[] | null; label: string }
+const { media, label } = Astro.props;
+const items = (media ?? []).filter((m) => m?.asset);
+---
+{items.length > 0 && (
+  <section class="section gallery" data-theme="white" aria-label={label}>
+    <div class="wrapper">
+      <Carousel {label} itemWidth="min(85vw, 40rem)" controls="bottom">
+        {items.map((image) => (
+          <li>
+            <figure>
+              <div class="media-frame"><SanityImg {image} sizes="(min-width: 48rem) 40rem, 85vw" aspect={3 / 2} /></div>
+              {image.caption && <figcaption>{image.caption}</figcaption>}
+            </figure>
+          </li>
+        ))}
+      </Carousel>
+    </div>
+  </section>
+)}
+
+<style>
+  .gallery { padding-block-start: 0; }
+  .media-frame { aspect-ratio: 3 / 2; }
+  figcaption { margin-block-start: var(--space-2xs); font-size: var(--step--1); color: var(--color-muted); }
+</style>

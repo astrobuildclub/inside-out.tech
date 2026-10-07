@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+Astro.response.status = 404;
+---
+<BaseLayout title="Pagina niet gevonden" noindex>
+  <section class="section" data-theme="green">
+    <div class="wrapper stack">
+      <p class="eyebrow">404</p>
+      <h1>Deze pagina bestaat niet (meer).</h1>
+      <p class="intro">Misschien is hij verhuisd. Ga terug naar de homepage of bekijk onze oplossingen.</p>
+      <div class="buttons">
+        <a class="button" data-style="primary" href="/">Naar de homepage</a>
+        <a class="button" data-style="secondary" href="/plug-play">Plug &amp; Play</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .stack { display: grid; gap: var(--space-m); justify-items: start; padding-block: var(--space-2xl); }
+</style>

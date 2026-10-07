@@ -1,0 +1,44 @@
+---
+import { stegaClean } from "@sanity/client/stega";
+import Section from "./Section.astro";
+import ItemCard from "../ItemCard.astro";
+import Carousel from "../Carousel.astro";
+import LinkButton from "../LinkButton.astro";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "collectionList" }>;
+const { title, intro, layout, limit, link, items = [], theme, collection } = Astro.props;
+const list = limit ? items.slice(0, limit) : items;
+const carousel = stegaClean(layout) === "carousel";
+const labels = { project: "Projecten", news: "Nieuws", module: "Modules", person: "Team" } as const;
+const label = title ?? labels[stegaClean(collection)] ?? "Overzicht";
+---
+<Section {theme}>
+  <div class:list={["wrapper", carousel ? "split" : "stack"]}>
+    {(title || intro || link) && (
+      <div class="head" data-reveal>
+        {title && <h2>{title}</h2>}
+        {intro && <p class="intro">{intro}</p>}
+        <LinkButton {link} style="secondary" />
+      </div>
+    )}
+    {list.length === 0 ? (
+      <p class="muted">Hier verschijnen binnenkort items.</p>
+    ) : carousel ? (
+      <Carousel {label}>{list.map((item) => <li><ItemCard {item} /></li>)}</Carousel>
+    ) : (
+      <ul role="list" class="grid-auto" style={stegaClean(collection) === "person" ? "--grid-min: 14rem" : undefined}>
+        {list.map((item) => <li data-reveal><ItemCard {item} /></li>)}
+      </ul>
+    )}
+  </div>
+</Section>
+
+<style>
+  .stack { display: grid; gap: var(--space-l); }
+  .split { display: grid; gap: var(--space-l); }
+  @media (min-width: 62rem) { .split { grid-template-columns: minmax(16rem, 1fr) 3fr; align-items: start; } }
+  .head { display: grid; gap: var(--space-s); justify-items: start; }
+  h2 { font-size: var(--step-3); }
+  .grid-auto { --grid-min: 18rem; }
+</style>

@@ -1,0 +1,15 @@
+---
+// Portable Text → HTML. Stijl via .prose (base.css).
+import { PortableText } from "astro-portabletext";
+import type { PortableTextBlock } from "@portabletext/types";
+import RichTextLink from "./RichTextLink.astro";
+import RichTextBlock from "./RichTextBlock.astro";
+
+interface Props { value?: PortableTextBlock[] | null; class?: string }
+const { value, class: className } = Astro.props;
+---
+{value?.length ? (
+  <div class:list={["prose", className]}>
+    <PortableText value={value} components={{ mark: { link: RichTextLink }, block: { lead: RichTextBlock } }} />
+  </div>
+) : null}

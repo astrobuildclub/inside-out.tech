@@ -1,0 +1,8 @@
+---
+import { stegaClean } from "@sanity/client/stega";
+import { isExternal } from "../lib/links";
+const { node } = Astro.props;
+const href = stegaClean(node?.markDef?.href as string | undefined);
+const external = isExternal(href);
+---
+<a href={href} {...(external && { target: "_blank", rel: "noopener" })}><slot />{external && <span class="visually-hidden"> (opent in nieuw venster)</span>}</a>

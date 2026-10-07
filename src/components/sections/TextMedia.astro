@@ -1,0 +1,40 @@
+---
+import { stegaClean } from "@sanity/client/stega";
+import Section from "./Section.astro";
+import RichText from "../RichText.astro";
+import SanityImg from "../SanityImg.astro";
+import LinkButton from "../LinkButton.astro";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "textMedia" }>;
+const { title, body, bodySecondary, image, imagePosition, buttons, theme } = Astro.props;
+const hasImage = !!image?.asset;
+const twoCols = !hasImage && !!bodySecondary?.length;
+---
+<Section {theme}>
+  <div class:list={["wrapper grid", { "has-image": hasImage, "two-cols": twoCols, "image-left": stegaClean(imagePosition) === "left" }]}>
+    <div class="text" data-reveal>
+      {title && <h2>{title}</h2>}
+      <RichText value={body} />
+      {hasImage && <RichText value={bodySecondary} />}
+      {buttons?.length ? <div class="buttons">{buttons.map((link) => <LinkButton {link} />)}</div> : null}
+    </div>
+    {twoCols && <div class="text" data-reveal><RichText value={bodySecondary} /></div>}
+    {hasImage && (
+      <div class="media media-frame" data-reveal>
+        <SanityImg {image} sizes="(min-width: 62rem) 45vw, 100vw" />
+      </div>
+    )}
+  </div>
+</Section>
+
+<style>
+  .grid { display: grid; gap: var(--space-xl); align-items: start; }
+  .text { display: grid; gap: var(--space-m); }
+  h2 { font-size: var(--step-3); max-inline-size: 20ch; }
+  @media (min-width: 62rem) {
+    .grid.has-image, .grid.two-cols { grid-template-columns: 1fr 1fr; }
+    .grid.has-image { align-items: center; }
+    .grid.image-left .media { order: -1; }
+  }
+</style>

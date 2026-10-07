@@ -1,0 +1,37 @@
+---
+// Rendert de page-builder-secties. Nieuw sectietype: schema/sections → component → case hieronder.
+import { stegaClean } from "@sanity/client/stega";
+import Hero from "./sections/Hero.astro";
+import PageHeader from "./sections/PageHeader.astro";
+import TextMedia from "./sections/TextMedia.astro";
+import CardGrid from "./sections/CardGrid.astro";
+import UspGrid from "./sections/UspGrid.astro";
+import Checklist from "./sections/Checklist.astro";
+import Cta from "./sections/Cta.astro";
+import CollectionList from "./sections/CollectionList.astro";
+import LogoMarquee from "./sections/LogoMarquee.astro";
+import Steps from "./sections/Steps.astro";
+import Contact from "./sections/Contact.astro";
+import type { Section } from "../lib/sanity/queries";
+
+interface Props { sections?: Section[] | null }
+const { sections = [] } = Astro.props;
+
+const components = {
+  hero: Hero,
+  pageHeader: PageHeader,
+  textMedia: TextMedia,
+  cardGrid: CardGrid,
+  uspGrid: UspGrid,
+  checklist: Checklist,
+  cta: Cta,
+  collectionList: CollectionList,
+  logoMarquee: LogoMarquee,
+  steps: Steps,
+  contact: Contact,
+} as const;
+---
+{sections?.map((section) => {
+  const Component = components[stegaClean(section._type) as keyof typeof components] as any;
+  return Component ? <Component {...section} /> : null;
+})}

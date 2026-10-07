@@ -1,0 +1,59 @@
+---
+// Lopende logobanden. De lijst staat twee keer in de DOM voor een naadloze loop;
+// de kopie is aria-hidden. Stilstaand bij reduced motion en pauze bij hover/focus.
+import Section from "./Section.astro";
+import SanityImg from "../SanityImg.astro";
+import type { Logo, Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "logoMarquee" }>;
+const { clientsTitle, partnersTitle, clients = [], partners = [], theme = "white" } = Astro.props;
+const rows = [
+  { title: clientsTitle ?? "Opdrachtgevers", logos: clients },
+  { title: partnersTitle ?? "Partners", logos: partners },
+].filter((r) => r.logos.length);
+---
+<Section {theme}>
+  <div class="wrapper rows">
+    {rows.map((row) => (
+      <div class="row">
+        <h2 class="row-title">{row.title}</h2>
+        <div class="marquee">
+          {[0, 1].map((copy) => (
+            <ul role="list" class="logos" aria-hidden={copy === 1 ? "true" : undefined}>
+              {row.logos.map((logo: Logo) => (
+                <li><SanityImg image={logo.logo} sizes="10rem" alt={copy === 1 ? "" : logo.title} /></li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .rows { display: grid; gap: var(--space-l); }
+  .row { display: grid; gap: var(--space-s); }
+  .row-title { font-size: var(--step-1); letter-spacing: 0; }
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .logos { display: flex; flex-shrink: 0; gap: var(--space-xl); padding-inline-end: var(--space-xl); align-items: center; }
+  .logos li { inline-size: 9rem; block-size: 4rem; display: grid; place-items: center; }
+  .logos :global(img) { max-inline-size: 100%; max-block-size: 100%; inline-size: auto; object-fit: contain; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .logos :global(img) { filter: grayscale(1) invert(1) brightness(1.6); mix-blend-mode: screen; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .logos { animation: marquee 30s linear infinite; }
+    .marquee:hover .logos { animation-play-state: paused; }
+    @keyframes marquee { to { translate: -100% 0; } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { flex-wrap: wrap; mask-image: none; }
+    .logos[aria-hidden] { display: none; }
+    .logos { flex-wrap: wrap; flex-shrink: 1; }
+  }
+</style>

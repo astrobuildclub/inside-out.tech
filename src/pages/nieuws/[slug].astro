@@ -1,0 +1,77 @@
+---
+import { stegaClean } from "@sanity/client/stega";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/sections/PageHeader.astro";
+import RichText from "../../components/RichText.astro";
+import SanityImg from "../../components/SanityImg.astro";
+import MediaGallery from "../../components/MediaGallery.astro";
+import ItemCard from "../../components/ItemCard.astro";
+import { loadQuery } from "../../lib/sanity/load-query";
+import { urlFor } from "../../lib/sanity/image";
+import { NEWS_QUERY, type News } from "../../lib/sanity/queries";
+import { articleJsonLd, breadcrumbJsonLd } from "../../lib/seo";
+import { isExternal } from "../../lib/links";
+
+const { data: post } = await loadQuery<News | null>({ query: NEWS_QUERY, params: { slug: Astro.params.slug ?? "" } });
+if (!post) return Astro.rewrite("/404");
+
+const site = Astro.site!;
+const published = stegaClean(post.publishedAt);
+const date = new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "long", year: "numeric" }).format(new Date(published));
+const crumbs = [{ label: "Home", href: "/" }, { label: "Nieuws", href: "/nieuws" }, { label: post.title }];
+const source = stegaClean(post.linkUrl);
+const jsonLd = [
+  articleJsonLd(
+    {
+      title: stegaClean(post.title),
+      publishedAt: published,
+      updatedAt: post._updatedAt,
+      image: post.image?.asset ? urlFor(post.image).width(1200).url() : undefined,
+      description: stegaClean(post.intro),
+    },
+    new URL(Astro.url.pathname, site),
+    site,
+  ),
+  breadcrumbJsonLd([{ name: "Nieuws", path: "/nieuws" }, { name: post.title, path: Astro.url.pathname }], site),
+];
+---
+<BaseLayout title={post.title} seo={post.seo} fallbackDescription={post.intro} fallbackImage={post.image} type="article" {jsonLd}>
+  <PageHeader _type="pageHeader" _key="header" title={post.title} intro={post.intro} breadcrumbs={crumbs} theme="green">
+    <p class="date"><time datetime={published}>{date}</time></p>
+  </PageHeader>
+
+  <section class="section" data-theme="white">
+    <div class="wrapper detail">
+      <article class="content">
+        {post.image?.asset && <div class="media media-frame"><SanityImg image={post.image} sizes="(min-width: 62rem) 46rem, 100vw" priority /></div>}
+        <RichText value={post.content} />
+        {source && (
+          <p>
+            <a class="button" data-style="secondary" href={source} {...(isExternal(source) && { target: "_blank", rel: "noopener" })}>
+              {post.linkLabel ?? "Lees het originele artikel"}<span class="visually-hidden"> (opent in nieuw venster)</span>
+            </a>
+          </p>
+        )}
+      </article>
+      {post.related?.length ? (
+        <aside class="related" aria-labelledby="related-title">
+          <h2 id="related-title">Gerelateerd nieuws</h2>
+          <ul role="list">{post.related.map((item) => <li><ItemCard {item} sizes="20rem" /></li>)}</ul>
+        </aside>
+      ) : null}
+    </div>
+  </section>
+
+  <MediaGallery media={post.media} label={`Beelden bij ${post.title}`} />
+</BaseLayout>
+
+<style>
+  .date { color: var(--color-muted); font-size: var(--step--1); }
+  .detail { display: grid; gap: var(--space-2xl); align-items: start; }
+  @media (min-width: 62rem) { .detail { grid-template-columns: minmax(0, 46rem) 20rem; justify-content: space-between; } }
+  .content { display: grid; gap: var(--space-l); }
+  .media { aspect-ratio: 16 / 9; }
+  .related { display: grid; gap: var(--space-s); }
+  .related h2 { font-size: var(--step-1); letter-spacing: 0; }
+  .related ul { display: grid; gap: var(--space-m); }
+</style>

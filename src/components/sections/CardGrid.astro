@@ -1,0 +1,53 @@
+---
+import Section from "./Section.astro";
+import SanityImg from "../SanityImg.astro";
+import LinkButton from "../LinkButton.astro";
+import Icon from "../Icon.astro";
+import type { Section as S } from "../../lib/sanity/queries";
+
+type Props = Extract<S, { _type: "cardGrid" }>;
+const { title, intro, cards, theme } = Astro.props;
+---
+<Section {theme}>
+  <div class="wrapper stack">
+    {(title || intro) && (
+      <div class="head">
+        {title && <h2>{title}</h2>}
+        {intro && <p class="intro">{intro}</p>}
+      </div>
+    )}
+    <ul role="list" class="cards">
+      {cards?.map((card) => (
+        <li class="card" data-reveal>
+          {card.image?.asset && <div class="media"><SanityImg image={card.image} sizes="(min-width: 48rem) 45vw, 100vw" aspect={4 / 3} /></div>}
+          <div class="body">
+            <h3>{card.title}</h3>
+            {card.text && <p>{card.text}</p>}
+            {card.bullets?.length ? (
+              <ul role="list" class="bullets">
+                {card.bullets.map((b) => <li><Icon name="check" />{b}</li>)}
+              </ul>
+            ) : null}
+            <LinkButton link={card.link} style="secondary" class="more" />
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Section>
+
+<style>
+  .stack { display: grid; gap: var(--space-l); }
+  .head { display: grid; gap: var(--space-s); }
+  .cards { display: grid; gap: var(--space-m); }
+  @media (min-width: 48rem) { .cards { grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); } }
+  .card { display: grid; grid-template-rows: auto 1fr; }
+  .media { aspect-ratio: 4 / 3; background: var(--color-surface); }
+  .media :global(img) { inline-size: 100%; block-size: 100%; object-fit: contain; }
+  .body { display: grid; gap: var(--space-s); align-content: start; padding: var(--space-m); }
+  h3 { font-size: var(--step-3); }
+  .bullets { display: grid; gap: var(--space-2xs); font-size: var(--step--1); }
+  .bullets li { display: grid; grid-template-columns: 1.25rem 1fr; gap: var(--space-2xs); }
+  .bullets svg { inline-size: 1rem; block-size: 1rem; margin-block-start: 0.2em; color: var(--leaf); }
+  :global(.more) { justify-self: start; margin-block-start: auto; }
+</style>

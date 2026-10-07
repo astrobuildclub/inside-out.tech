@@ -1,0 +1,19 @@
+<!doctype html>
+<!--
+  Alleen voor Netlify Forms: Netlify vindt formulieren bij de build in statische HTML.
+  De site is SSR, dus het echte formulier (src/components/sections/Contact.astro) post hiernaartoe.
+  Velden hier en in Contact.astro gelijk houden.
+-->
+<html lang="nl">
+  <head><meta charset="utf-8" /><meta name="robots" content="noindex" /><title>Formulieren</title></head>
+  <body>
+    <form name="contact" data-netlify="true" netlify-honeypot="bedrijfsfax" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+      <input type="text" name="bedrijfsfax" />
+      <input type="text" name="page" />
+    </form>
+  </body>
+</html>

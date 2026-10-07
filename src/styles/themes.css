@@ -1,0 +1,48 @@
+/*
+ * Sectiethema's (Webflow "parent modes"). Een sectie zet data-theme; de rollen
+ * (--color-*) en de knopkleuren schuiven mee. "light" en "white" volgen licht/donker,
+ * de merkvlakken (green, lemon, dark) zijn in beide modi gelijk.
+ */
+[data-theme] { background: var(--color-bg); color: var(--color-fg); }
+
+[data-theme='white'] {
+  --color-bg: light-dark(var(--white), var(--ink));
+  --color-surface: light-dark(var(--concrete), oklch(25% 0.01 200));
+}
+
+[data-theme='light'] {
+  --color-bg: light-dark(var(--concrete), oklch(23% 0.01 200));
+  --color-surface: light-dark(var(--white), var(--ink));
+}
+
+[data-theme='green'],
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: var(--planet);
+  --color-surface: var(--planet-deep);
+  --color-fg: var(--white);
+  --color-muted: oklch(100% 0 0 / 0.72);
+  --color-line: oklch(100% 0 0 / 0.2);
+  --color-accent: var(--lemon);
+  --color-focus: var(--lemon);
+  --btn-bg-hover: var(--white);
+  --btn-fg-hover: var(--planet);
+  --btn-line: var(--lemon);
+}
+[data-theme='dark'] { --color-bg: var(--ink); --color-surface: oklch(25% 0.01 200); }
+
+[data-theme='lemon'] {
+  color-scheme: light;
+  --color-bg: var(--lemon);
+  --color-surface: oklch(97% 0.12 123);
+  --color-fg: var(--planet);
+  --color-muted: oklch(33.9% 0.062 178.5 / 0.8);
+  --color-line: oklch(33.9% 0.062 178.5 / 0.25);
+  --color-accent: var(--planet);
+  --color-focus: var(--blue);
+  --btn-bg: var(--planet);
+  --btn-fg: var(--white);
+  --btn-bg-hover: var(--white);
+  --btn-fg-hover: var(--planet);
+  --btn-line: var(--planet);
+}

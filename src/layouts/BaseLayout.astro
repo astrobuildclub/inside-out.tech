@@ -1,0 +1,88 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { VisualEditing } from "@sanity/astro/visual-editing";
+import "../styles/index.css";
+import SiteMeta from "../components/SiteMeta.astro";
+import ThemeScript from "../components/ThemeScript.astro";
+import PageProgress from "../components/PageProgress.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+import { getLayoutData } from "../lib/sanity/settings";
+import type { Seo } from "../lib/sanity/queries";
+import type { SanityImage } from "../lib/sanity/image";
+
+interface Props {
+  title: string;
+  seo?: Seo;
+  fallbackDescription?: string;
+  fallbackImage?: SanityImage;
+  type?: "website" | "article";
+  isHome?: boolean;
+  noindex?: boolean;
+  jsonLd?: object[];
+}
+
+const { settings, navigation } = await getLayoutData();
+const visualEditingEnabled = Astro.locals.visualEditing;
+const privacyHref = navigation.privacy ? `/${navigation.privacy.slug}` : "/privacy";
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <ThemeScript />
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#004238" />
+    <link rel="preload" href="/fonts/HafferSQXH-Regular.otf" as="font" type="font/otf" crossorigin />
+    <link rel="preload" href="/fonts/HafferSQXH-Medium.otf" as="font" type="font/otf" crossorigin />
+    <SiteMeta {settings} {...Astro.props} />
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#inhoud">Naar de inhoud</a>
+    <PageProgress />
+    <Header {navigation} {settings} />
+    <main id="inhoud" data-page tabindex="-1">
+      <slot />
+    </main>
+    <Footer {navigation} {settings} />
+    <CookieConsent {privacyHref} />
+    <VisualEditing enabled={visualEditingEnabled} />
+
+    <script>
+      // Fade-in bij in beeld komen (vervangt Webflow IX2). Zonder JS of met reduced motion: direct zichtbaar (zie components.css).
+      document.addEventListener("astro:page-load", () => {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add("is-visible"), io.unobserve(e.target))),
+          { rootMargin: "0px 0px -10% 0px" },
+        );
+        document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+        document.addEventListener("astro:before-swap", () => io.disconnect(), { once: true });
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  :root { --progress-color: var(--lemon); }
+  .skip-link {
+    position: absolute;
+    inset-inline-start: var(--space-s);
+    inset-block-start: -10rem;
+    z-index: 100;
+    padding: var(--space-2xs) var(--space-s);
+    border-radius: var(--radius-pill);
+    background: var(--lemon);
+    color: var(--planet);
+    font-weight: 500;
+  }
+  .skip-link:focus { inset-block-start: var(--space-s); }
+  main:focus { outline: none; }
+</style>

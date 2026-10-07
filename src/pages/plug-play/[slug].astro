@@ -1,0 +1,60 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/sections/PageHeader.astro";
+import RichText from "../../components/RichText.astro";
+import SanityImg from "../../components/SanityImg.astro";
+import MediaGallery from "../../components/MediaGallery.astro";
+import Cta from "../../components/sections/Cta.astro";
+import { loadQuery } from "../../lib/sanity/load-query";
+import { fileUrl } from "../../lib/sanity/image";
+import { MODULE_QUERY, type Module } from "../../lib/sanity/queries";
+import { breadcrumbJsonLd } from "../../lib/seo";
+
+const { data: mod } = await loadQuery<Module | null>({ query: MODULE_QUERY, params: { slug: Astro.params.slug ?? "" } });
+if (!mod) return Astro.rewrite("/404");
+
+const factsheet = fileUrl(mod.factsheet ?? undefined);
+const crumbs = [{ label: "Home", href: "/" }, { label: "Plug & Play", href: "/plug-play" }, { label: mod.title }];
+---
+<BaseLayout
+  title={mod.title}
+  seo={mod.seo}
+  fallbackDescription={mod.intro ?? mod.excerpt}
+  fallbackImage={mod.image}
+  jsonLd={[breadcrumbJsonLd([{ name: "Plug & Play", path: "/plug-play" }, { name: mod.title, path: Astro.url.pathname }], Astro.site!)]}
+>
+  <PageHeader _type="pageHeader" _key="header" eyebrow={mod.type} title={mod.title} intro={mod.intro} breadcrumbs={crumbs} theme="green" />
+
+  <section class="section" data-theme="white">
+    <div class="wrapper detail">
+      <div class="content">
+        {mod.image?.asset && <div class="media media-frame"><SanityImg image={mod.image} sizes="(min-width: 62rem) 50vw, 100vw" priority /></div>}
+        <RichText value={mod.content} />
+      </div>
+      {(mod.specs?.length || factsheet) && (
+        <aside class="specs card" aria-labelledby="specs-title">
+          <h2 id="specs-title">Specificaties</h2>
+          <RichText value={mod.specs} />
+          {factsheet && (
+            <a class="button" data-style="primary" href={factsheet} target="_blank" rel="noopener">
+              Download factsheet (PDF)<span class="visually-hidden"> (opent in nieuw venster)</span>
+            </a>
+          )}
+        </aside>
+      )}
+    </div>
+  </section>
+
+  <MediaGallery media={mod.media} label={`Beelden van ${mod.title}`} />
+  {mod.cta && <Cta {...mod.cta} />}
+</BaseLayout>
+
+<style>
+  .detail { display: grid; gap: var(--space-xl); align-items: start; }
+  @media (min-width: 62rem) { .detail { grid-template-columns: 1fr 22rem; gap: var(--space-2xl); } .specs { position: sticky; inset-block-start: 6rem; } }
+  .content { display: grid; gap: var(--space-l); }
+  .media { aspect-ratio: 4 / 3; }
+  .media :global(img) { object-fit: contain; }
+  .specs { display: grid; gap: var(--space-s); padding: var(--space-m); justify-items: start; }
+  .specs h2 { font-size: var(--step-2); }
+</style>
