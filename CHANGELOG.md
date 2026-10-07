@@ -7,6 +7,8 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 
 ## [Unreleased]
 
+## [2026-10-07]
+
 ### Toegevoegd
 - Astro 7 + Sanity 6-project (SSR op Netlify) als vervanger van de Webflow-site, met Studio op `/admin` (project `cf1ukp64`).
 - Sanity-schema: page builder (11 secties), projecten, modules, nieuws, team, opdrachtgevers & partners, stappen, site-instellingen en navigatie.
