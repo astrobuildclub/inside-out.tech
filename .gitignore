@@ -40,3 +40,6 @@ scripts/.cache/
 
 # Gelicenseerde fonts: niet in git (repo is openbaar). Zie scripts/fetch-fonts.mjs
 public/fonts/
+
+# Impeccable (lokale critique-snapshots en live-mode)
+.impeccable/

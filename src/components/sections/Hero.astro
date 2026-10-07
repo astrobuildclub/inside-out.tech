@@ -64,7 +64,8 @@ const webm = videoWebm?.asset?.url;
   :global(.hero) { padding-block: var(--space-l) var(--space-2xl); }
   .grid { display: grid; gap: var(--space-l); align-items: center; }
   @media (min-width: 62rem) { .grid { grid-template-columns: 1fr 1fr; } }
-  .title { font-size: var(--step-3); line-height: var(--leading-snug); }
+  /* Grootste kop van de pagina: één stap boven de sectiekoppen (--step-3) */
+  .title { font-size: var(--step-4); line-height: var(--leading-tight); }
   .text { display: grid; gap: var(--space-l); }
   .media { position: relative; aspect-ratio: 4 / 3; }
   .media :global(img), .media video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }

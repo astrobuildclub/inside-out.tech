@@ -1,0 +1,33 @@
+---
+// Kruimelpad als pill (live). Op groen wit, op lichte vlakken het oppervlak van de sectie.
+// Altijd één regel: het laatste item (= de paginatitel, staat ook in de h1) kort zo nodig in met "…".
+interface Props { items: { label: string; href?: string }[]; class?: string }
+const { items, class: className } = Astro.props;
+---
+{items.length > 0 && (
+  <nav aria-label="Kruimelpad" class:list={["crumbs", className]}>
+    <ol role="list">
+      {items.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+    </ol>
+  </nav>
+)}
+
+<style>
+  .crumbs { display: flex; min-inline-size: 0; }
+  ol {
+    display: flex; align-items: center; gap: 0.9em;
+    max-inline-size: 100%;
+    padding: 0.7em 1.4em;
+    border-radius: var(--radius-pill);
+    background: var(--white); color: var(--planet);
+    font-size: var(--step-0);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  :global(:is([data-tone="white"], [data-tone="light"])) ol { background: var(--color-surface); }
+  li { flex-shrink: 0; }
+  li:last-child { flex-shrink: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  li + li::before { content: "›"; margin-inline-end: 0.9em; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
