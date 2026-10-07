@@ -10,8 +10,8 @@ web
 
 Drie gelijkwaardige doelgroepen, elk met een eigen route op de site:
 
-- **Vastgoed** (woningcorporaties, VvE's, vastgoedbeheerders; pagina "Bouwpartners", `/vastgoedbeheer`): moeten bestaand vastgoed verduurzamen, vaak hoogbouw en gestapelde woningbouw in bewoonde staat, en zoeken voorspelbare kosten, planning en prestaties.
-- **Bouwpartners** (aannemers, bouwteams; `/op-maat`): zoeken een oplossing die inpasbaar is in planvorming, tenders, RGS-trajecten en BIM.
+- **Vastgoed** (woningcorporaties, VvE's, vastgoedbeheerders; route `/vastgoedbeheer`, op de site gelabeld "Bouwpartners"): moeten bestaand vastgoed verduurzamen, vaak hoogbouw en gestapelde woningbouw in bewoonde staat, en zoeken voorspelbare kosten, planning en prestaties.
+- **Aannemers en bouwteams** (vooral via "Plug & Play op maat", `/op-maat`): zoeken een oplossing die inpasbaar is in planvorming, tenders, RGS-trajecten en BIM.
 - **Installatiepartners** (installateurs; `/installateur`): zoeken prefab modules die snel te monteren zijn, met minder faalkosten en een voorspelbaar proces.
 
 De site is Nederlandstalig en zakelijk (B2B). Bezoekers oriënteren zich voor een project of tender, of controleren Inside Out als partner.
@@ -49,7 +49,7 @@ Er zijn twee leveringsvormen:
   - io Delta: slimme gevel die isoleert, verwarmt, ventileert en opwekt
   - io Echo: isoleert, verwarmt, ventileert en wekt duurzame energie op
   - io Foxtrot: monitoring en aansturing
-- **Terminologie:** "Plug & Play", "Plug & Play op maat", "Bouwpartners" (route vastgoed), "Installatiepartners".
+- **Terminologie:** "Plug & Play", "Plug & Play op maat", "Bouwpartners" en "Installatiepartners". Het label "Bouwpartners" voor de vastgoedroute (`/vastgoedbeheer`) is een bewuste keuze van de klant (zoals live) en blijft staan; gebruik "Bouwpartners" dus niet voor aannemers.
 - **URL's** zijn gelijk aan de Webflow-site en blijven zo (zie `src/lib/sanity/routes.ts`).
 - **Content** komt uit Sanity. De bron is de live site inside-out.tech, niet de Webflow-testexport.
 - **Techniek:** Astro + Sanity, Netlify. De repo is public, dus geen gelicenseerde fonts, tokens of klantdocumenten in git.

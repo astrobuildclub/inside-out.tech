@@ -10,6 +10,9 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 ### Toegevoegd
 - `PRODUCT.md`: productcontext (doelgroepen, positionering, bewijs, merkafspraken) voor design-werk met Impeccable.
 
+### Onderhoud
+- `.impeccable/` in `.gitignore` (lokale critique-snapshots).
+
 ## [2026-10-07]
 
 ### Toegevoegd
