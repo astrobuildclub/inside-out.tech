@@ -1,4 +1,4 @@
-/* Haffer SQ XH. TODO: omzetten naar woff2 (scheelt ~60 %), daarna de src-regels aanpassen. */
+/* Haffer SQ XH (gelicenseerd; staat niet in git, zie scripts/fetch-fonts.mjs). TODO: woff2 (scheelt ~60 %). */
 @font-face { font-family: "Haffer SQ"; src: url("/fonts/HafferSQXH-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
 @font-face { font-family: "Haffer SQ"; src: url("/fonts/HafferSQXH-RegularItalic.otf") format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
 @font-face { font-family: "Haffer SQ"; src: url("/fonts/HafferSQXH-Medium.otf") format("opentype"); font-weight: 500; font-style: normal; font-display: swap; }

@@ -38,4 +38,5 @@ Lees eerst `README.md` voor context en `CHANGELOG.md` voor recente wijzigingen.
 - **Bron van content is live (inside-out.tech), niet de testexport.** "Draft" in de Webflow-CSV betekent: heeft niet-gepubliceerde wijzigingen. Gepubliceerd = live; afwijkende export-versies staan als Sanity-draft (zie `LIVE` in `scripts/import-webflow.mjs`).
 - **Stappen:** nummer 0 = zonder nummer (Initiatieffase); anders toont de site "1. Titel".
 - **Niet gemigreerd:** Webflow-collectie Doelgroepen (nergens meer gebruikt), lege detailtemplates, `cookie.html`, verborgen nav-items "Resources/Docs".
-- **Fonts:** Haffer SQ staat als OTF in `public/fonts/`. TODO: omzetten naar woff2.
+- **Fonts:** Haffer SQ is gelicenseerd en staat **niet** in git (de repo is openbaar). `public/fonts/` is gitignored; `scripts/fetch-fonts.mjs` (npm `prebuild`) haalt de bestanden op via `FONT_URLS` (Netlify env, bestanden als Sanity-assets). Nooit fonts committen. TODO: woff2.
+- **Repo is public** (Netlify gratis team bouwt geen private org-repo's). Dus: geen tokens, klantdocumenten of gelicenseerde bestanden committen.

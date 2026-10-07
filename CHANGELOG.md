@@ -19,6 +19,7 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Importscript `scripts/import-webflow.mjs` voor CSV-content, vaste pagina's, beelden, video en PDF.
 
 ### Gewijzigd
+- Repo openbaar gemaakt (het gratis Netlify-team bouwt geen private org-repo's). De gelicenseerde Haffer SQ-fonts staan daarom niet meer in git (ook uit de historie gehaald); ze staan als Sanity-assets en worden bij de build opgehaald via `FONT_URLS` (`scripts/fetch-fonts.mjs`).
 - Netlify-site `insideout-tech` in team All This, gekoppeld aan de repo; env-vars gezet (read-token als secret voor production, deploy previews en branch deploys).
 - Repo op GitHub: `astrobuildclub/inside-out.tech` (private), met About-sectie.
 - Tweede vergelijkingsronde met live (screenshots in `_webflow-export/screens/`): kopfoto min. 480px op desktop; standaard witte achtergrond (intro en voordelen Installatiepartners/Bouwpartners op wit); inpasbaarheidsbeeld groot op groen; stappenplan zonder eigen titel in één witte kaart; Over ons met "Wat we leveren" en "Het team" in één tekstkolom, teamfoto's tot de rand, logo's in omlijnde vakken en eigen CTA-tekst; moduledetail zonder kruimelpad met blauwe specificatiekaart; projectdetail met smal feitenblok, grotere galerij en CTA "Benieuwd wat de modules…"; projectkaarten met wit tekstvlak; contactgegevens en kaart in één lemon-kaart; smallere footer.
@@ -53,5 +54,5 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Privacyverklaring: tekst nodig van de klant (pagina staat er met noindex).
 - Alt-teksten bij CMS-beelden (projecten, nieuws, modules) ontbreken in Webflow: aanvullen in de Studio.
 - Live-URL's van Webflow controleren voor redirects (Webflow-CMS-paden kunnen afwijken).
-- Fonts naar woff2, video comprimeren (nu 14 + 20 MB).
+- Fonts naar woff2 (dan ook de Sanity-assets en `FONT_URLS` vervangen), video comprimeren (nu 14 + 20 MB).
 - Netlify-site, GitHub-repo `astrobuildclub/inside-out.tech`, CORS-origins en read-token nog inrichten.
