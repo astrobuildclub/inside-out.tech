@@ -7,6 +7,9 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 
 ## [Unreleased]
 
+### Toegevoegd
+- `PRODUCT.md`: productcontext (doelgroepen, positionering, bewijs, merkafspraken) voor design-werk met Impeccable.
+
 ## [2026-10-07]
 
 ### Toegevoegd
