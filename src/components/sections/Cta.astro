@@ -11,7 +11,7 @@ const hasImage = !!image?.asset;
 ---
 <Section {theme}>
   <div class="wrapper">
-    <div class:list={["panel", { "has-image": hasImage }]} data-theme={hasImage ? undefined : "lemon"} data-reveal>
+    <div class:list={["panel", { "has-image": hasImage }]} data-tone={hasImage ? undefined : "lemon"} data-reveal>
       <div class="text">
         <h2>{title}</h2>
         {text && <p>{text}</p>}

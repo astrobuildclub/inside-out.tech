@@ -1,7 +1,7 @@
 /* Gedeelde bouwstenen; componentspecifieke stijl staat scoped in de .astro-bestanden. */
 
 .section { padding-block: var(--section-space); }
-.section + .section[data-theme='white'], .section[data-theme='white'] + .section[data-theme='white'] { padding-block-start: 0; }
+.section + .section[data-tone='white'], .section[data-tone='white'] + .section[data-tone='white'] { padding-block-start: 0; }
 
 .button {
   display: inline-flex;

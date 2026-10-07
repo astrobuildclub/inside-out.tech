@@ -21,7 +21,7 @@ const items = (navigation.main ?? []).map((link) => {
 const a = settings.address;
 ---
 
-<header class="site-header" data-theme="green">
+<header class="site-header" data-tone="green">
   <div class="wrapper bar">
     <a href="/" class="home" aria-label={`${settings.siteName}, naar de homepage`}><Logo class="logo" /></a>
 
@@ -41,7 +41,7 @@ const a = settings.address;
     </div>
   </div>
 
-  <dialog class="menu" data-menu aria-label="Menu" data-theme="green">
+  <dialog class="menu" data-menu aria-label="Menu" data-tone="green">
     <div class="wrapper menu-inner">
       <div class="menu-top">
         <a href="/" class="home" aria-label={`${settings.siteName}, naar de homepage`}><Logo class="logo" /></a>
@@ -94,7 +94,7 @@ const a = settings.address;
     gap: var(--space-m);
     min-block-size: 4.5rem;
   }
-  .logo { inline-size: clamp(8.5rem, 12vw, 10.5rem); block-size: auto; color: var(--white); }
+  .home :global(.logo) { inline-size: clamp(8.5rem, 12vw, 10.5rem); block-size: auto; color: var(--white); }
   .home { display: block; border-radius: 2px; }
 
   .nav-inline { display: none; margin-inline-start: auto; }

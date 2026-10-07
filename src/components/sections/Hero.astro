@@ -18,13 +18,13 @@ const webm = videoWebm?.asset?.url;
 ---
 <Section theme="green" class="hero">
   <div class="wrapper grid">
-    <div class="text" data-reveal>
+    <div class="text">
       <h1 class="title">{parts.map((p) => (p.highlight ? <span class="highlight">{p.text}</span> : p.text))}</h1>
       {buttons?.length ? (
         <div class="buttons">{buttons.map((link, i) => <LinkButton {link} style={i === 0 ? "primary" : "secondary"} arrow={i === 0} />)}</div>
       ) : null}
     </div>
-    <div class="media media-frame" data-reveal>
+    <div class="media media-frame">
       {mp4 || webm ? (
         <>
           <video data-hero-video muted loop playsinline preload="metadata" poster={poster} aria-hidden="true">
@@ -61,7 +61,7 @@ const webm = videoWebm?.asset?.url;
 </script>
 
 <style>
-  .hero { padding-block: var(--space-l) var(--space-2xl); }
+  :global(.hero) { padding-block: var(--space-l) var(--space-2xl); }
   .grid { display: grid; gap: var(--space-l); align-items: center; }
   @media (min-width: 62rem) { .grid { grid-template-columns: 1fr 1fr; } }
   .title { font-size: var(--step-4); line-height: var(--leading-snug); max-inline-size: 18ch; }

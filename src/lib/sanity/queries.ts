@@ -52,7 +52,8 @@ export const PAGE_QUERY = groq`*[_type == "page" && slug.current == $slug][0]{
 
 export const PROJECT_QUERY = groq`*[_type == "project" && slug.current == $slug][0]{
   _id, title, "slug": slug.current, image, excerpt, content, address, period, client, media, seo,
-  "modules": modules[]->{ title, "slug": slug.current },
+  // Zwakke verwijzingen naar ongepubliceerde modules geven null: die vallen weg.
+  "modules": modules[defined(@->slug.current)]->{ title, "slug": slug.current },
   "cta": *[_type == "page" && slug.current == "projecten"][0].sections[_type == "cta"][0]{ ..., link${LINK} }
 }`;
 
@@ -64,7 +65,7 @@ export const MODULE_QUERY = groq`*[_type == "module" && slug.current == $slug][0
 
 export const NEWS_QUERY = groq`*[_type == "news" && slug.current == $slug][0]{
   _id, title, "slug": slug.current, publishedAt, _updatedAt, image, intro, content, linkUrl, linkLabel, media, seo,
-  "related": related[]->{ ${CARD.news} }
+  "related": related[defined(@->slug.current)]->{ ${CARD.news} }
 }`;
 
 // ── Types ─────────────────────────────────────────────────────────────────────

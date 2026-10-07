@@ -19,7 +19,7 @@ const termsUrl = fileUrl(navigation.terms ?? undefined);
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer" data-theme="green">
+<footer class="site-footer" data-tone="green">
   <div class="wrapper grid">
     <div class="about">
       <a href="/" class="home" aria-label={`${settings.siteName}, naar de homepage`}><Logo class="logo" /></a>
@@ -46,7 +46,7 @@ const year = new Date().getFullYear();
       )}
     </div>
 
-    <div class="panel" data-theme="white">
+    <div class="panel" data-tone="white">
       <nav aria-label="Footermenu">
         <ul role="list">
           {(navigation.footer ?? []).map((link) => <li><a href={linkHref(link)}>{link.label}</a></li>)}
@@ -76,7 +76,7 @@ const year = new Date().getFullYear();
   .grid { display: grid; gap: var(--space-xl); }
   @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 36rem); align-items: end; } }
 
-  .logo { inline-size: 10.5rem; block-size: auto; color: var(--white); margin-block-end: var(--space-l); }
+  .home :global(.logo) { inline-size: 10.5rem; block-size: auto; color: var(--white); margin-block-end: var(--space-l); }
   .home { display: inline-block; }
   address { font-style: normal; display: grid; gap: var(--space-s); font-size: var(--step--1); }
   address a { text-decoration: none; }

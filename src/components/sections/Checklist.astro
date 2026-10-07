@@ -10,7 +10,7 @@ const { title, items, link, theme = "white" } = Astro.props;
 ---
 <Section {theme}>
   <div class="wrapper">
-    <div class="panel" data-theme="green" data-reveal>
+    <div class="panel" data-tone="green" data-reveal>
       {title && <h2>{title}</h2>}
       <ul role="list" class="items">
         {items?.map((item) => <li><Icon name="check" /><span>{item}</span></li>)}

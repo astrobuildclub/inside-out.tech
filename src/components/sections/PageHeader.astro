@@ -8,7 +8,7 @@ const { eyebrow, title, intro, image, theme = "green", breadcrumbs } = Astro.pro
 ---
 <Section theme={theme} class:list={["page-header", { "has-image": image?.asset }]}>
   {image?.asset && <div class="bg"><SanityImg {image} sizes="100vw" priority alt="" /></div>}
-  <div class="wrapper inner" data-reveal>
+  <div class="wrapper inner">
     {breadcrumbs?.length ? (
       <nav aria-label="Kruimelpad" class="crumbs">
         <ol role="list">
@@ -24,11 +24,11 @@ const { eyebrow, title, intro, image, theme = "green", breadcrumbs } = Astro.pro
 </Section>
 
 <style>
-  .page-header { position: relative; isolation: isolate; padding-block: var(--space-2xl) var(--space-xl); }
-  .page-header.has-image { min-block-size: clamp(20rem, 45vh, 32rem); display: grid; align-items: end; }
+  :global(.page-header) { position: relative; isolation: isolate; padding-block: var(--space-2xl) var(--space-xl); }
+  :global(.page-header.has-image) { min-block-size: clamp(20rem, 45vh, 32rem); display: grid; align-items: end; }
   .bg { position: absolute; inset: 0; z-index: -1; }
   .bg :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
-  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(33.9% 0.062 178.5 / 0.95), oklch(33.9% 0.062 178.5 / 0.35)); }
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, var(--planet) 92%, transparent), color-mix(in srgb, var(--planet) 55%, transparent) 45%, color-mix(in srgb, var(--planet) 15%, transparent)); }
   .inner { display: grid; gap: var(--space-s); }
   h1 { max-inline-size: 22ch; }
   .eyebrow { color: var(--color-accent); }

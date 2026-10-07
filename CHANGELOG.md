@@ -18,6 +18,15 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Cookie-consent (`vanilla-cookieconsent`) met GA4 en Google Ads pas na toestemming (vervangt Finsweet).
 - Importscript `scripts/import-webflow.mjs` voor CSV-content, vaste pagina's, beelden, video en PDF.
 
+### Gewijzigd
+- Webflow-content geïmporteerd in Sanity (`cf1ukp64/production`): 63 documenten, beelden, homevideo en voorwaarden-PDF.
+- Sectie-attribuut heet nu `data-tone` (was `data-theme`, botste met de licht/donker-keuze op `<html>`); lichte tones zetten kleurschema en rollen expliciet terug, zodat een wit vlak in een groene sectie niet donker wordt.
+- Geen fade-in meer op hero en paginakop (sneller zichtbaar boven de vouw).
+
+### Opgelost
+- Projectpagina gaf een fout bij verwijzingen naar ongepubliceerde modules (io Charlie/Echo): die worden nu overgeslagen.
+- Logo en paginakop-stijlen bereikten de onderliggende componenten niet (scoped CSS); kopfoto werd volledig afgedekt door de overlay.
+
 ### Opgelost (t.o.v. Webflow)
 - Social links in het menu wezen naar google.com; telefoonlink miste een cijfer; e-maillink op contact was `#`.
 - Knop "Plan Plug & Play maatwerktraject" op Op maat was geen link; "Get Started" op modules wees naar `#` (nu factsheet-download als die er is).
