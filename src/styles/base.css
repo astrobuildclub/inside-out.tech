@@ -42,6 +42,7 @@ hr { border: 0; border-block-start: var(--border-width) solid var(--color-line);
 /* Lopende tekst uit Sanity (richText) */
 .prose { max-inline-size: var(--measure); }
 .prose > * + * { margin-block-start: 1em; }
+.prose > :first-child { margin-block-start: 0; }
 .prose :is(h2, h3, h4) { margin-block-start: 1.75em; font-size: var(--step-1); font-weight: 700; }
 .prose :is(h2, h3, h4) + * { margin-block-start: 0.5em; }
 .prose .lead { font-size: var(--step-1); line-height: var(--leading-lead); }
