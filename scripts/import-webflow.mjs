@@ -68,6 +68,35 @@ function pt(html) {
   return blocks.length ? blocks : undefined;
 }
 
+// ── Live (inside-out.tech) is de bron ────────────────────────────────────────
+// De export komt van de testsite. "Draft" in de CSV betekent daar: heeft niet-gepubliceerde
+// wijzigingen; de live-versie staat wél online. Daarom: gepubliceerd = live, en waar de
+// export afwijkt komt die versie als Sanity-draft. Gegevens opgehaald op 2026-10-07.
+
+const LIVE = {
+  projectOrder: ["de-wilde-metaal---bilthoven", "de-werf---almere", "albert-meijnsstraat---wormerveer", "lumifield", "westgate-ii---hoofdkantoor-pwc", "henriettedreef", "noordertogt"],
+  news: {
+    "met-het-verduurzamen-van-hoogbouw-gaan-we-veel-impact-maken": { date: "2024-05-16T12:00:04Z", url: "https://demakersvanmorgen.com/met-het-verduurzamen-van-hoogbouw-gaan-we-veel-impact-maken/", label: "demakersvanmorgen.com" },
+    "woningstichting-woonwaard-kiest-voor-inside-out": { date: "2024-05-16T12:00:03Z", url: "https://www.woonwaard.nl/nieuws/nieuwsbericht/grootse-verduurzaming-noordertogt", label: "woonwaard.nl" },
+    "hoog-bezoek-op-project-henriettedreef": { date: "2024-05-16T12:00:02Z", url: "https://lnkd.in/ecs4fWY4", label: "LinkedIn" },
+    "inside-out-maakt-een-flat-in-enkele-dagen-volledig-duurzaam": { date: "2024-05-16T12:00:01Z", url: "https://tw.nl/inside-out-maakt-een-flat-in-enkele-dagen-volledig-duurzaam/", label: "tw.nl" },
+    "arv-subsidie-project": { date: "2023-09-13T11:41:44Z" },
+  },
+  // Gepubliceerde stappen zoals live; slug → [nummer, titel, beschrijving]
+  steps: {
+    installatiepartners: {
+      "prefab-productie-en-voorbereiding": [1, "Prefab productie en voorbereiding", "<p>Voorproductie van de module en afstemming van aansluiting en logistiek door Inside Out.</p>"],
+      "montage-op-project": [2, "Montage op project", "<p>Installatie op locatie door installatiepartner, met minimale ingrepen in de woning en korte doorlooptijd</p>"],
+      "eerste-technisch-overleg": [3, "Eerste technisch overleg", "<p>Verkenning van vastgoed, proces en planning op basis van vragenlijst, bouwkundige rapporten, foto’s en instellingen van het huidige systeem.</p>"],
+      conceptraming: [4, "Conceptraming", "<p>Schetsontwerp van de renovatie met eerste inschatting van planning en uitvoering (90% kostenzekerheid) door Inside Out</p>"],
+      "configuratie-en-kostenraming": [5, "Configuratie en kostenraming", "<p>Afstemming van uitvoering en moduleconfiguratie door installatiepartner.</p>"],
+    },
+    rgs: {
+      "3-opdrachtverstrekking-projectvoorbereiding": [3, "Opdrachtverstrekking/ Projectvoorbereiding", "<p>Selectie van standaard- of maatwerkmodules, engineering door bouwteam en voorbereiding van prefab productie en logistiek.</p>"],
+    },
+  },
+};
+
 // ── Assets ────────────────────────────────────────────────────────────────────
 
 let assetCache = {};
@@ -113,6 +142,11 @@ const ref = (id, type, drafts) =>
 const docs = [];
 const draftIds = new Set();
 const add = (doc, isDraft) => docs.push(clean({ ...doc, _id: isDraft ? `drafts.${doc._id}` : doc._id }));
+/** Gepubliceerd = live; afwijkende export-versie als draft ernaast. */
+const addWithDraft = (published, draft) => {
+  add(published);
+  if (draft) add({ ...draft, _id: published._id }, true);
+};
 
 async function importCollections() {
   const modules = await readCsv("Modules");
@@ -124,8 +158,7 @@ async function importCollections() {
   const stappen = await readCsv("Stappenplan installatiepartners");
   // Doelgroepen wordt nergens meer gebruikt: niet geïmporteerd (zie AGENTS.md).
 
-  for (const r of modules) if (bool(r.Draft)) draftIds.add(`module-${r.Slug}`);
-  for (const r of news) if (bool(r.Draft)) draftIds.add(`news-${r.Slug}`);
+  // Modules met Draft staan live gewoon online (inhoud gelijk aan de export): publiceren.
 
   console.log("Modules");
   for (const [i, r] of modules.entries()) {
@@ -133,7 +166,7 @@ async function importCollections() {
       {
         _id: `module-${r.Slug}`,
         _type: "module",
-        title: r.Title,
+        title: r.Title.trim(),
         slug: { _type: "slug", current: r.Slug },
         type: r.Type,
         image: await image(r.Afbeelding),
@@ -145,17 +178,16 @@ async function importCollections() {
         media: await media(r.Media),
         orderRank: i,
       },
-      bool(r.Draft),
     );
   }
 
   console.log("Projecten");
-  for (const [i, r] of projects.entries()) {
+  for (const r of projects) {
     add(
       {
         _id: `project-${r.Slug}`,
         _type: "project",
-        title: r.Name,
+        title: r.Name.trim(),
         slug: { _type: "slug", current: r.Slug },
         image: await image(r["Featured Image"]),
         excerpt: r.Excerpt,
@@ -165,7 +197,7 @@ async function importCollections() {
         client: r.Opdrachtgever,
         modules: withKeys(list(r.Modules).map((s) => ref(`module-${s}`, "module", draftIds))),
         media: await media(r.Media),
-        orderRank: i,
+        orderRank: LIVE.projectOrder.indexOf(r.Slug),
       },
       bool(r.Draft),
     );
@@ -177,13 +209,13 @@ async function importCollections() {
       {
         _id: `news-${r.Slug}`,
         _type: "news",
-        title: r.Name,
+        title: r.Name.trim(),
         slug: { _type: "slug", current: r.Slug },
-        publishedAt: date(r["Published On"]) ?? date(r["Created On"]),
+        publishedAt: LIVE.news[r.Slug]?.date ?? date(r["Published On"]) ?? date(r["Created On"]),
         image: await image(r.Featured),
         intro: r.Intro?.trim(),
-        linkUrl: r["Link URL"],
-        linkLabel: r["Link Label"],
+        linkUrl: LIVE.news[r.Slug]?.url ?? r["Link URL"],
+        linkLabel: LIVE.news[r.Slug]?.label ?? r["Link Label"],
         content: pt(r.Content),
         media: await media(r.Media),
         related: withKeys(list(r["Related news"]).map((s) => ref(`news-${s}`, "news", draftIds))),
@@ -193,12 +225,14 @@ async function importCollections() {
   }
 
   console.log("Team");
-  for (const [i, r] of people.entries()) {
+  // Live staat het team op alfabet.
+  const team = [...people].sort((a, b) => a.Name.localeCompare(b.Name, "nl"));
+  for (const [i, r] of team.entries()) {
     add(
       {
         _id: `person-${r.Slug}`,
         _type: "person",
-        name: r.Name,
+        name: r.Name.trim(),
         role: r.Role,
         image: await image(r.Image),
         email: r["E-mail"]?.toLowerCase(),
@@ -215,7 +249,7 @@ async function importCollections() {
       {
         _id: `clientPartner-${r.Slug}`,
         _type: "clientPartner",
-        title: r.Title,
+        title: r.Title.trim(),
         kind: r.Type === "Partner" ? "partner" : "client",
         logo: await image(r.Logo),
       },
@@ -236,8 +270,14 @@ async function importCollections() {
       description: pt(r.Description),
     };
   };
-  for (const r of rgs) add(step(r, "rgs"), bool(r.Draft) || bool(r.Hide));
-  for (const r of stappen) add(step(r, "installatiepartners"), bool(r.Draft) || bool(r.Hide));
+  for (const [listName, rows] of [["rgs", rgs], ["installatiepartners", stappen]]) {
+    for (const r of rows) {
+      const fromCsv = step(r, listName);
+      const live = LIVE.steps[listName][r.Slug];
+      if (!live) add(fromCsv, bool(r.Hide));
+      else addWithDraft({ ...fromCsv, number: live[0], title: live[1], description: pt(live[2]) }, fromCsv);
+    }
+  }
 }
 
 // ── Vaste pagina's (teksten uit de Webflow-HTML) ──────────────────────────────
@@ -258,11 +298,11 @@ const CTA_ADVIES = (title) =>
 
 async function ctaDuurzaam() {
   return section("cta", {
-    title: "Samen gaan we voor duurzaam.",
+    title: "*Samen* gaan we voor *duurzaam*.",
     text: "Weten hoe onze Plug & Play modules jou kunnen helpen om sneller, voorspelbaarder en efficiënter te verduurzamen?",
     link: link("Maak een afspraak", "contact"),
     image: await image("images/pauldas.png", { alt: "Paul Das van Inside Out" }),
-    theme: "light",
+    theme: "white",
   });
 }
 
@@ -287,7 +327,8 @@ async function importPages() {
         body: pt(
           "<p>Door installaties naar de buitenschil te verplaatsen, ontstaat binnen meer ruimte en wordt overlast tot een minimum beperkt. De systemen worden prefab geleverd voor directe montage, zodat verduurzaming snel, voorspelbaar en efficiënt verloopt. Geschikt voor hoogbouw, gestapelde woningbouw, utiliteitsgebouwen en kantoorpanden.</p><p>Leverbaar als standaard Plug &amp; Play oplossing of op maat.</p>",
         ),
-        buttons: [link("Voor bouwpartners", "vastgoedbeheer", "secondary"), link("Voor installatiepartners", "installateur", "secondary")],
+        buttons: [link("Voor bouwpartners", "vastgoedbeheer", "primary"), link("Voor installatiepartners", "installateur", "primary")],
+        align: "center",
         theme: "lemon",
       }),
       section("cardGrid", {
@@ -325,6 +366,7 @@ async function importPages() {
           "Grip op uitvoering, proces én kosten",
           "Inzicht in én optimaliseren van energieprestaties",
         ],
+        text: "Klaar om te versnellen met Plug & Play?",
         link: link("Maak een afspraak", "contact"),
         theme: "white",
       }),
@@ -345,7 +387,7 @@ async function importPages() {
     "over-ons",
     "Over ons",
     [
-      section("pageHeader", { eyebrow: "Over ons", title: "Complexe vraagstukken eenvoudig maken", image: await image("images/Visual.webp", { alt: "" }), theme: "green" }),
+      section("pageHeader", { title: "over ons", image: await image("images/Visual.webp", { alt: "" }), theme: "green" }),
       section("textMedia", {
         body: pt(
           '<p>Wij houden van complexe vraagstukken eenvoudig maken. Dat is precies waarom wij Inside Out Technologies hebben opgericht: om de gebouwde omgeving versneld te verduurzamen met oplossingen die écht werken in de praktijk.</p><p>Sinds 2022 ontwikkelen wij plug&amp;play energiesystemen die de energietransitie in appartementen en kantoorpanden werkbaar en betaalbaar maken. Wij ontwerpen het energiesysteem, ontwikkelen prefab modules en zorgen dat alles snel en met minimale overlast geïnstalleerd kan worden. Samen met vastgoedonderhoudsbedrijven en installateurs brengen wij onze oplossingen — zoals <a href="https://warmeflat.nl">Warmeflat</a> — naar woningcorporaties en VvE\'s in heel Nederland.</p><p>Wij geloven dat standaardisatie de sleutel is tot schaalbare verduurzaming — en dat je met plug&amp;play systemen meer kunt bereiken met minder vakmensen.</p>',
@@ -354,25 +396,19 @@ async function importPages() {
         theme: "white",
       }),
       section("textMedia", {
-        title: "Wat we leveren",
         body: pt(
-          "<ul><li>Innovatieve modules voor duurzame energieoplossingen</li><li>BIM-systeemontwerp afgestemd op gebouwstructuur en renovatieopgave</li><li>Technische ondersteuning in planfase, aanbesteding en uitvoering</li><li>Slimme Plug &amp; Play modules met warmtepomp, ventilatie, afgifte en PV-opwekking</li><li>Meer leefruimte, minder overlast, kortere doorlooptijd</li></ul>",
+          "<h3>Wat we leveren</h3><ul><li>Innovatieve modules voor duurzame energieoplossingen</li><li>BIM-systeemontwerp afgestemd op gebouwstructuur en renovatieopgave</li><li>Technische ondersteuning in planfase, aanbesteding en uitvoering</li><li>Slimme Plug &amp; Play modules met warmtepomp, ventilatie, afgifte en PV-opwekking</li><li>Meer leefruimte, minder overlast, kortere doorlooptijd</li></ul><p>Door installaties naar gevel of dak te verplaatsen ontstaat meer leefruimte in de woning, minder hinder tijdens uitvoering en een efficiënter renovatieproces. Zo dragen onze Plug &amp; Play oplossingen bij aan duurzame waarde voor huurders, opdrachtgevers én uitvoerende partners.</p><h3>Het team</h3><p>Inside Out is een team van jonge, technische ontwikkelaars met een gedeelde missie: de energietransitie uitvoerbaar maken met Plug &amp; Play energiesystemen. We combineren expertise in bouwkunde, installatietechniek en systeemintegratie met een scherpe focus op praktische toepasbaarheid. Samen met strategische partners en installatiebedrijven werken we nauw samen met opdrachtgevers die écht willen verduurzamen.</p>",
         ),
-        bodySecondary: pt(
-          "<p>Door installaties naar gevel of dak te verplaatsen ontstaat meer leefruimte in de woning, minder hinder tijdens uitvoering en een efficiënter renovatieproces. Zo dragen onze Plug &amp; Play oplossingen bij aan duurzame waarde voor huurders, opdrachtgevers én uitvoerende partners.</p>",
-        ),
-        theme: "light",
-      }),
-      section("collectionList", {
-        collection: "person",
-        title: "Het team",
-        intro:
-          "Inside Out is een team van jonge, technische ontwikkelaars met een gedeelde missie: de energietransitie uitvoerbaar maken met Plug & Play energiesystemen. We combineren expertise in bouwkunde, installatietechniek en systeemintegratie met een scherpe focus op praktische toepasbaarheid.",
-        layout: "grid",
         theme: "white",
       }),
+      section("collectionList", { collection: "person", layout: "grid", theme: "white" }),
       section("logoMarquee", { clientsTitle: "Opdrachtgevers", partnersTitle: "Partners", theme: "white" }),
-      CTA_ADVIES("Benieuwd wat de modules voor jou kunnen betekenen?"),
+      section("cta", {
+        title: "Benieuwd wat de modules voor jou kunnen betekenen?",
+        text: "Ontdek hoe onze Plug & Play energiesystemen jouw project sneller, voorspelbaarder en effectiever maken",
+        link: link("Plan gratis adviesgesprek", "contact"),
+        theme: "white",
+      }),
     ],
     "Inside Out maakt hoogbouw energiepositief door plug & play modules die ieder huis omtovert naar een comfortabel en zuinig thuis. We brengen installaties vanuit het hart van de woning naar de gevel of het dak.",
   );
@@ -382,10 +418,9 @@ async function importPages() {
     "Contact",
     [
       section("pageHeader", {
-        eyebrow: "Contact",
-        title: "Wil je meer weten?",
-        intro: "Over de modules, onze werkwijze of iets anders? Neem dan contact met ons op.",
-        theme: "green",
+        title: "contact",
+        intro: "Wil je meer weten over de modules, onze werkwijze of iets anders? Neem dan contact met ons op.",
+        theme: "white",
       }),
       section("contact", {
         formTitle: "Stuur een bericht",
@@ -403,10 +438,10 @@ async function importPages() {
     "Nieuws",
     [
       section("pageHeader", {
-        eyebrow: "Nieuws",
-        title: "Kennis delen",
-        intro: "Kennisdeling staat bij ons voorop. We houden je graag op de hoogte van het laatste nieuws en ontwikkelingen rondom duurzame transformatie van hoogbouw.",
-        theme: "green",
+        title: "nieuws",
+        intro: "Kennisdeling staat bij ons voorop, we houden je graag op de hoogte van het laatste nieuws en ontwikkeling rondom duurzame transformatie van hoogbouw.",
+        layout: "split",
+        theme: "white",
       }),
       section("collectionList", { collection: "news", layout: "grid", theme: "light" }),
       CTA_ADVIES("Benieuwd wat de modules voor jou kunnen betekenen?"),
@@ -419,11 +454,11 @@ async function importPages() {
     "Projecten",
     [
       section("pageHeader", {
-        eyebrow: "Projecten",
-        title: "Van hoogbouwflat tot kantoorpand",
+        title: "Projecten",
         intro:
-          "Onze Plug & Play energiesystemen worden toegepast in uiteenlopende gebouwtypes: van hoogbouwflats en gestapelde woningbouw tot utiliteitsgebouwen. In elk project brengen we bouwkunde en installatietechniek vanaf de planfase samen in één geïntegreerd energiesysteem, zodat de verduurzaming snel, voorspelbaar en technisch beheersbaar verloopt.",
-        theme: "green",
+          "Onze Plug & Play energiesystemen worden toegepast in uiteenlopende gebouwtypes: van hoogbouwflats en gestapelde woningbouw tot utiliteitsgebouwen. In elk project brengen we bouwkunde en installatietechniek vanaf de planfase samen in één geïntegreerd energiesysteem, afgestemd op gebouwstructuur, de uitvoering, het gebruik en de gewenste energieprestatie, zodat de verduurzaming snel, voorspelbaar en technisch beheersbaar verloopt.",
+        layout: "split",
+        theme: "light",
       }),
       section("collectionList", { collection: "project", layout: "grid", theme: "light" }),
       CTA_ADVIES("Weten wat een Plug & Play energiesysteem kan betekenen voor jouw gebouw of project?"),
@@ -435,7 +470,7 @@ async function importPages() {
     "installateur",
     "Installatiepartners",
     [
-      section("pageHeader", { eyebrow: "Installatiepartners", title: "Plug & Play modules: klaar voor snelle verduurzaming van gestapelde bouw", theme: "green" }),
+      section("pageHeader", { title: "Plug & Play modules: klaar voor snelle verduurzaming van gestapelde bouw", theme: "green" }),
       section("textMedia", {
         body: pt(
           "<p>Onze Plug &amp; Play modules voorzien in duurzame verwarming, warm water, energieopslag en duurzame opwekking, speciaal ontworpen voor snelle plaatsing en minimale overlast.</p><p>Het is onze ambitie om systemen te ontwikkelen met een hoog niveau van inpasbaarheid. De hoogte van het inpasbaarheidsniveau bepaalt de geschiktheid voor opschaling.</p>",
@@ -443,11 +478,14 @@ async function importPages() {
         bodySecondary: pt(
           '<p>Om tot compleet gestandaardiseerde systemen te komen worden er criteria gesteld aan het gebouw en de toepassing ervan. Om het systeem op te schalen wordt er een commercieel concept ontwikkeld dat samen met installatiepartners wordt uitgerold in de markt.</p><p>Het eerste concept dat wordt uitgerold is <a href="https://www.warmeflat.nl/">Warmeflat</a>. Installatiepartners kunnen zich aanmelden om samen projecten te realiseren.</p>',
         ),
-        image: await image("images/inpasbaarheid.png", { alt: "Schema van het inpasbaarheidsniveau van Plug & Play-systemen" }),
+        theme: "white",
+      }),
+      section("textMedia", {
+        image: await image("images/inpasbaarheid.png", { alt: "Schema: Plug & Play op maat en gestandaardiseerd, van lage tot hoge mate van inpasbaarheid" }),
         theme: "green",
       }),
       section("uspGrid", {
-        theme: "green",
+        theme: "white",
         items: withKeys([
           { title: "Prefab en direct inzetbaar zonder engineering", text: "Gestandaardiseerd ontwerp op basis van vergelijkbare woningtypes. Geen extra tekenwerk of complexe technische voorbereiding nodig." },
           { title: "Snelle installatie met minimale overlast", text: "De Plug & Play modules worden zoveel mogelijk buiten de woning geplaatst. Minimale ingrepen binnen zorgen dat bewoners thuis kunnen blijven tijdens de uitvoering." },
@@ -456,9 +494,9 @@ async function importPages() {
         ]),
       }),
       section("steps", {
-        title: "Stappenplan voor installatiepartners",
         list: "installatiepartners",
         image: await image("images/Bravo-2.0-sq.png", { alt: "Plug & Play-module io Bravo 2.0" }),
+        imagePosition: "left",
         theme: "light",
       }),
       await ctaDuurzaam(),
@@ -470,16 +508,16 @@ async function importPages() {
     "vastgoedbeheer",
     "Bouwpartners",
     [
-      section("pageHeader", { eyebrow: "Bouwpartners", title: "Plug & Play energiesystemen als basis voor snelle en voorspelbare verduurzaming", theme: "green" }),
+      section("pageHeader", { title: "Plug & Play energiesystemen als basis voor snelle en voorspelbare verduurzaming", theme: "green" }),
       section("textMedia", {
         body: pt(
           "<p>Wij ontwikkelen energiesystemen die de verduurzaming van vastgoed versnellen en voorspelbaar maken. Door bouwkunde en installatietechniek vanaf de planfase te combineren ontstaat een oplossing die direct toepasbaar is zonder ingrijpende aanpassingen.</p><p>Hierdoor kunnen wij duidelijkheid geven op het gebied van installaties &amp; energie en de kosten, risico’s en prestaties hiervan.</p><p>Dit doen wij binnen RGS-trajecten waar wij aanhaken vanaf de initiatieffase in samenwerking met de strategische partner, of binnen tendertrajecten.</p>",
         ),
         image: await image("images/aanpak.png", { alt: "Schema van de aanpak van Inside Out" }),
-        theme: "green",
+        theme: "white",
       }),
       section("uspGrid", {
-        theme: "green",
+        theme: "white",
         items: withKeys([
           { title: "Inpasbaar in planvorming en voor tendertrajecten", text: "Ontwikkelen samen met ketenpartners, binnen RGS-trajecten en tenders, met planvorming tot en met de beheerfase." },
           { title: "Van ambitie naar technisch systeemontwerp", text: "Doelen worden in de planfase vertaald naar een Plug & Play energiesysteem dat technisch aansluit op gebouwstructuur en renovatie-eisen." },
@@ -497,11 +535,11 @@ async function importPages() {
     "Plug & Play",
     [
       section("pageHeader", {
-        eyebrow: "Plug & Play",
-        title: "De basis van elk duurzaam energiesysteem",
+        title: "Plug & Play",
         intro:
-          "Onze Plug & Play modules zijn standaard inpasbaar bij de juiste bouwkundige voorwaarden en flexibel aanpasbaar waar nodig. Elke prefab module integreert bouwkunde en installatietechniek in één compacte energieoplossing, klaar voor gevel- of dakmontage, met minimale ingrepen op locatie en een voorspelbaar installatieproces.",
-        theme: "green",
+          "Onze Plug & Play modules vormen de basis van elk duurzaam energiesysteem. Ze zijn standaard inpasbaar bij de juiste bouwkundige voorwaarden en flexibel aanpasbaar waar nodig. Elke prefab module integreert bouwkunde en installatietechniek in één compacte Plug & Play energieoplossing. Klaar voor gevel- of dakmontage, met minimale ingrepen op locatie en een voorspelbaar installatieproces.",
+        layout: "split",
+        theme: "white",
       }),
       section("cta", {
         title: "Ontdek Plug & Play op maat",
@@ -519,24 +557,19 @@ async function importPages() {
     "op-maat",
     "Plug & Play op maat",
     [
-      section("pageHeader", {
-        eyebrow: "Maatwerk",
-        title: "Plug & Play op maat",
-        intro:
-          "Met op maat gemaakte prefab Plug & Play energiesystemen maken we verduurzaming van gebouwen structureel uitvoerbaar. Binnen het bouwteam ontwikkelen we het technische BIM-model, gevolgd door prefab productie, installatie en monitoring.",
-        theme: "green",
-      }),
+      section("pageHeader", { eyebrow: "maatwerk", title: "Plug & Play op maat", theme: "green" }),
       section("textMedia", {
         body: pt(
-          "<p class=\"lead\">Bouwkundige en installatietechnische oplossingen worden vanaf het ontwerp gecombineerd. Zo wordt verduurzaming integraal uitvoerbaar, met voorspelbare prestaties, heldere samenwerking en een korte doorlooptijd.</p>",
+          "<p>Met op maat gemaakte Prefab Plug &amp; Play energiesystemen maken we verduurzaming van gebouwen structureel uitvoerbaar. Binnen het bouwteam ontwikkelen we het technisch BIM-model waar bouwkundige en installatietechnische oplossingen vanaf het ontwerp gecombineerd worden, gevolgd door prefab productie, installatie en monitoring. Zo wordt verduurzaming integraal uitvoerbaar met voorspelbare prestaties, heldere samenwerking en korte doorlooptijd.</p>",
         ),
         buttons: [link("Plan Plug & Play maatwerktraject", "contact", "primary")],
+        align: "center",
         theme: "white",
       }),
       section("steps", {
-        title: "RGS-fasen met Inside Out als energiesysteem-ontwikkelaar",
+        title: "Resultaatgericht Samenwerken",
         intro: pt(
-          "<h3>Resultaatgericht Samenwerken</h3><p>Binnen de RGS-methodiek (Resultaatgericht Samenwerken) wordt verduurzaming uitgevoerd in vaste fasen. Dit proces biedt planvoorbereiders en onderhoudsbedrijven een slimme, geïntegreerde totaaloplossing voor vastgoedverduurzaming.</p>",
+          "<p>Binnen de RGS-methodiek (Resultaatgericht Samenwerken) wordt verduurzaming uitgevoerd in vaste fasen. Dit proces biedt planvoorbereiders en onderhoudsbedrijven een slimme, geïntegreerde totaaloplossing voor vastgoedverduurzaming.</p><h3>RGS-fasen met Inside Out als energiesysteem-ontwikkelaar</h3>",
         ),
         list: "rgs",
         image: await image("images/Inside-Out-Website.jpg", { alt: "" }),
@@ -607,7 +640,7 @@ async function importSingletons() {
   add({
     _id: "navigation",
     _type: "navigation",
-    headerCta: link("Contact", "contact", "secondary"),
+    headerCta: link("contact", "contact", "secondary"),
     main: [
       link("Bouwpartners", "vastgoedbeheer"),
       link("Installatiepartners", "installateur"),
@@ -640,12 +673,26 @@ await importCollections();
 await importPages();
 await importSingletons();
 
+const ONLY = process.argv.find((a) => a.startsWith("--only="))?.slice(7).split(",");
+if (ONLY) {
+  const keep = docs.filter((d) => ONLY.includes(d._type));
+  docs.length = 0;
+  docs.push(...keep);
+  console.log(`Alleen: ${ONLY.join(", ")} (${docs.length} documenten)`);
+}
+
 if (DRY) {
   await writeFile(join(CACHE, "dry-run.json"), JSON.stringify(docs, null, 2));
   console.log(`\nDry run: ${docs.length} documenten in scripts/.cache/dry-run.json`);
 } else {
   const tx = client.transaction();
   for (const doc of docs) tx.createOrReplace(doc);
+  // Drafts uit een eerdere import die nu niet meer horen te bestaan, opruimen.
+  const ids = new Set(docs.map((d) => d._id));
+  const types = [...new Set(docs.map((d) => d._type))];
+  const staleDrafts = (await client.fetch(`*[_id in path("drafts.**") && _type in $types]._id`, { types })).filter((id) => !ids.has(id));
+  for (const id of staleDrafts) tx.delete(id);
+  if (staleDrafts.length) console.log(`Verouderde drafts verwijderd: ${staleDrafts.join(", ")}`);
   await tx.commit({ visibility: "async" });
   console.log(`\nKlaar: ${docs.length} documenten geïmporteerd in ${projectId}/${dataset}. Vergeet niet het write-token in te trekken.`);
 }

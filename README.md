@@ -9,9 +9,9 @@
 | **Status** | WIP: migratie vanaf Webflow (`insideout-test.webflow`) |
 | **SLA** | TODO |
 | **Live** | https://inside-out.tech (nog Webflow) |
-| **Netlify** | team All This, site TODO |
+| **Netlify** | team All This, site `insideout-tech` ([insideout-tech.netlify.app](https://insideout-tech.netlify.app)) |
 | **CMS** | Sanity project `cf1ukp64`, dataset `production`, Studio op `/admin` |
-| **Repo** | TODO: `github.com/astrobuildclub/inside-out.tech` (nog alleen lokaal) |
+| **Repo** | [github.com/astrobuildclub/inside-out.tech](https://github.com/astrobuildclub/inside-out.tech) (public: het gratis Netlify-team bouwt geen private org-repo's) |
 | **Notion** | TODO |
 
 ## Stack
@@ -42,6 +42,7 @@ Overige scripts: `npm run build`, `npm run preview`, `npm run check`, `npm run i
 | `SANITY_API_WRITE_TOKEN` | Alleen lokaal voor de Webflow-import (rol Editor), daarna intrekken | sanity.io/manage → API → Tokens |
 | `PUBLIC_GA_ID` | Google Analytics 4, laadt pas na toestemming | Google Analytics |
 | `PUBLIC_GOOGLE_ADS_ID` | Google Ads-tag, laadt pas na toestemming | Google Ads |
+| `FONT_URLS` | URL's van de gelicenseerde Haffer SQ-fonts (JSON), opgehaald door `prebuild` | Netlify env (bestanden staan als assets in Sanity) |
 
 Waarden staan nooit in git. Productiewaarden: Netlify → Site configuration → Environment variables (let op deploy contexts).
 
@@ -65,7 +66,7 @@ _webflow-export/    Originele Webflow-export (niet in git)
 ## Content en CMS
 
 - **Pagina's** (page builder): home, over ons, contact, nieuws, projecten, installatiepartners (`/installateur`), bouwpartners (`/vastgoedbeheer`), plug & play, op maat, privacy. Secties: hero, paginakop, tekst (+ beeld), kaarten, voordelen, checklist, call-to-action, collectie, logo's, stappen, contactformulier.
-- **Collecties:** projecten (`/projecten/<slug>`), modules (`/plug-play/<slug>`), nieuws (`/nieuws/<slug>`), team, opdrachtgevers & partners, stappen (RGS-fasen en stappenplan installatiepartners).
+- **Collecties:** projecten (`/projecten/<slug>`), modules (`/modules/<slug>`), nieuws (`/nieuws/<slug>`), team, opdrachtgevers & partners, stappen (RGS-fasen en stappenplan installatiepartners).
 - **Site-instellingen** en **Navigatie** als singletons.
 - Site-instellingen, SEO-velden en Visual Editing volgens `~/Code/_standards/SANITY.md`: ja.
 

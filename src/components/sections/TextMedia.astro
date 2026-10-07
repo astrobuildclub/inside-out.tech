@@ -7,12 +7,17 @@ import LinkButton from "../LinkButton.astro";
 import type { Section as S } from "../../lib/sanity/queries";
 
 type Props = Extract<S, { _type: "textMedia" }>;
-const { title, body, bodySecondary, image, imagePosition, buttons, theme } = Astro.props;
+const { title, body, bodySecondary, image, imagePosition, buttons, theme, align } = Astro.props;
 const hasImage = !!image?.asset;
+const imageOnly = hasImage && !title && !body?.length && !bodySecondary?.length && !buttons?.length;
 const twoCols = !hasImage && !!bodySecondary?.length;
+const centered = stegaClean(align) === "center" && !hasImage && !twoCols;
 ---
 <Section {theme}>
-  <div class:list={["wrapper grid", { "has-image": hasImage, "two-cols": twoCols, "image-left": stegaClean(imagePosition) === "left" }]}>
+  {imageOnly ? (
+  <div class="wrapper image-only" data-reveal><SanityImg {image} sizes="(min-width: 84rem) 84rem, 100vw" /></div>
+) : (
+  <div class:list={["wrapper grid", { "has-image": hasImage, "two-cols": twoCols, centered, "image-left": stegaClean(imagePosition) === "left" }]}>
     <div class="text" data-reveal>
       {title && <h2>{title}</h2>}
       <RichText value={body} />
@@ -26,15 +31,25 @@ const twoCols = !hasImage && !!bodySecondary?.length;
       </div>
     )}
   </div>
+)}
 </Section>
 
 <style>
   .grid { display: grid; gap: var(--space-xl); align-items: start; }
   .text { display: grid; gap: var(--space-m); }
-  h2 { font-size: var(--step-3); max-inline-size: 20ch; }
+  .image-only :global(img) { inline-size: 100%; block-size: auto; }
+  h2 { font-size: var(--step-2); max-inline-size: 28ch; }
+  /* Gecentreerd (live: lemon-intro op home, intro op Op maat) */
+  .centered { justify-items: center; text-align: center; }
+  .centered .text { justify-items: center; max-inline-size: 56rem; }
+  .centered h2 { font-size: var(--step-3); max-inline-size: 32ch; }
+  .centered :global(.prose) { max-inline-size: 60ch; font-size: var(--step-1); line-height: var(--leading-snug); }
+  .centered .buttons { justify-content: center; }
   @media (min-width: 62rem) {
     .grid.has-image, .grid.two-cols { grid-template-columns: 1fr 1fr; }
     .grid.has-image { align-items: center; }
+    /* Beeld naast tekst niet breder dan live */
+    .grid.has-image .media { max-inline-size: 32rem; justify-self: start; }
     .grid.image-left .media { order: -1; }
   }
 </style>

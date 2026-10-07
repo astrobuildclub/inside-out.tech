@@ -1,69 +1,122 @@
 ---
-// Kaart voor een item uit een collectie: project, nieuws, module of teamlid.
+// Kaart voor een collectie-item, per type zoals live:
+// project = beeld + tekst zonder kaartvlak · module = licht kaartvlak · nieuws = brede kaart · teamlid = foto + gegevens.
 import { stegaClean } from "@sanity/client/stega";
 import SanityImg from "./SanityImg.astro";
 import Icon from "./Icon.astro";
 import { hrefFor } from "../lib/sanity/routes";
+import { isExternal } from "../lib/links";
 import type { CardItem } from "../lib/sanity/queries";
 
-interface Props { item: CardItem; sizes?: string; headingLevel?: "h2" | "h3" }
-const { item, sizes = "(min-width: 62rem) 30vw, (min-width: 40rem) 45vw, 90vw", headingLevel: H = "h3" } = Astro.props;
+interface Props { item: CardItem; sizes?: string; headingLevel?: "h2" | "h3"; aspect?: number }
+const { item, sizes = "(min-width: 62rem) 45vw, 90vw", headingLevel: H = "h3", aspect } = Astro.props;
 const type = stegaClean(item._type);
 const href = hrefFor(type, stegaClean(item.slug));
 const date = item.publishedAt
   ? new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "long", year: "numeric" }).format(new Date(stegaClean(item.publishedAt)))
   : undefined;
+const source = stegaClean(item.linkUrl);
 ---
 {type === "person" ? (
   <article class="item person">
-    <div class="media"><SanityImg image={item.image} {sizes} aspect={4 / 5} /></div>
+    <div class="media"><SanityImg image={item.image} sizes="(min-width: 62rem) 22vw, 45vw" aspect={5 / 7} /></div>
     <div class="body">
       <H class="title">{item.title}</H>
       {item.role && <p class="meta">{item.role}</p>}
-      <p class="links">
-        {item.email && <a href={`mailto:${stegaClean(item.email)}`}><Icon name="mail" /><span class="visually-hidden">E-mail {item.title}</span></a>}
-        {item.linkedin && <a href={stegaClean(item.linkedin)} target="_blank" rel="noopener"><Icon name="linkedin" /><span class="visually-hidden">{item.title} op LinkedIn (opent in nieuw venster)</span></a>}
-      </p>
+      {item.email && <p class="email"><a href={`mailto:${stegaClean(item.email)}`}>{item.email}</a></p>}
+      {item.linkedin && (
+        <a class="linkedin" href={stegaClean(item.linkedin)} target="_blank" rel="noopener">
+          <Icon name="linkedin" /><span class="visually-hidden">{item.title} op LinkedIn (opent in nieuw venster)</span>
+        </a>
+      )}
     </div>
   </article>
-) : (
-  <article class="item">
-    <div class="media"><SanityImg image={item.image} {sizes} aspect={type === "module" ? 1 : 4 / 3} /></div>
+) : type === "news" ? (
+  <article class="item news">
     <div class="body">
-      {(item.address || item.type || date) && <p class="meta">{item.address ?? item.type ?? (date && <time datetime={stegaClean(item.publishedAt)}>{date}</time>)}</p>}
       <H class="title"><a href={href}>{item.title}</a></H>
-      {(item.excerpt || item.intro) && <p class="excerpt">{item.excerpt ?? item.intro}</p>}
-      <span class="more" aria-hidden="true">Lees meer <Icon name="arrow" /></span>
+      {item.intro && <p class="excerpt">{item.intro}</p>}
+      <p class="meta">
+        {date && <time datetime={stegaClean(item.publishedAt)}>{date}</time>}
+        {source && (
+          <a class="source" href={source} {...(isExternal(source) && { target: "_blank", rel: "noopener" })}>
+            {item.linkLabel ?? new URL(source).hostname}<span class="visually-hidden"> (bron, opent in nieuw venster)</span>
+          </a>
+        )}
+      </p>
+    </div>
+    {item.image?.asset && <div class="media"><SanityImg image={item.image} sizes="(min-width: 48rem) 30vw, 90vw" aspect={4 / 3} /></div>}
+  </article>
+) : (
+  <article class:list={["item", type]}>
+    <div class="media"><SanityImg image={item.image} {sizes} aspect={aspect ?? (type === "module" ? 1 : 4 / 3)} /></div>
+    <div class="body">
+      {type === "project" && item.address && <p class="meta">{item.address}</p>}
+      <H class="title"><a href={href}>{item.title}</a></H>
+      {type === "module" && item.type && <p class="meta">{item.type}</p>}
+      {item.excerpt && <p class="excerpt">{item.excerpt}</p>}
     </div>
   </article>
 )}
 
 <style>
-  .item {
-    position: relative;
-    display: grid; grid-template-rows: auto 1fr;
-    block-size: 100%;
-    border-radius: var(--radius);
-    background: var(--color-surface);
-    overflow: hidden;
-  }
-  .media { aspect-ratio: 4 / 3; background: var(--color-line); overflow: hidden; }
-  .person .media { aspect-ratio: 4 / 5; }
+  .item { position: relative; display: grid; align-content: start; gap: var(--space-s); block-size: 100%; }
+  .media { overflow: hidden; border-radius: var(--radius); background: var(--color-surface); }
   .media :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; transition: scale 600ms var(--ease); }
-  .item:not(.person):hover .media :global(img) { scale: 1.04; }
-  .body { display: grid; gap: var(--space-2xs); align-content: start; padding: var(--space-s) var(--space-m) var(--space-m); }
-  .meta { font-size: var(--step--1); color: var(--color-accent); font-weight: 500; }
-  .title { font-size: var(--step-1); line-height: var(--leading-snug); letter-spacing: 0; }
+  .item:hover .media :global(img) { scale: 1.03; }
+  .body { display: grid; gap: var(--space-3xs); align-content: start; }
+  .meta { font-size: var(--step--1); color: var(--color-muted); }
+  .title { font-size: var(--step-1); line-height: var(--leading-snug); }
   .title a { text-decoration: none; }
-  /* Hele kaart klikbaar, link blijft de echte titel-link */
+  /* Hele kaart klikbaar; de titel blijft de echte link */
   .title a::after { content: ""; position: absolute; inset: 0; }
   .title a:focus-visible { outline: none; }
-  .item:has(.title a:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 3px; }
-  .excerpt { font-size: var(--step--1); color: var(--color-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .more { display: inline-flex; gap: 0.4em; align-items: center; margin-block-start: var(--space-2xs); font-size: var(--step--1); font-weight: 500; }
-  .more :global(svg) { inline-size: 1em; block-size: 1em; transition: translate var(--duration) var(--ease); }
-  .item:hover .more :global(svg) { translate: 3px 0; }
-  .links { display: flex; gap: var(--space-2xs); margin-block-start: var(--space-2xs); }
-  .links a { display: grid; place-items: center; inline-size: 2.75rem; block-size: 2.75rem; border-radius: var(--radius-pill); background: var(--lemon); color: var(--planet); }
-  .links :global(svg) { inline-size: 1.1rem; block-size: 1.1rem; }
+  .item:has(.title a:focus-visible) { outline: 3px solid var(--color-focus); outline-offset: 4px; border-radius: var(--radius); }
+  .excerpt { font-size: var(--step--1); color: var(--color-muted); max-inline-size: 60ch; }
+
+  /* Project op een lichte sectie (overzicht): kaart met wit tekstvlak (live) */
+  :global([data-tone="light"]) .project { gap: 0; border-radius: var(--radius); overflow: hidden; background: var(--white); }
+  :global([data-tone="light"]) .project .media { border-radius: 0; }
+  :global([data-tone="light"]) .project .body { padding: var(--space-s) var(--space-m) var(--space-m); }
+  :global([data-tone="light"]) .project .title { font-size: var(--step-2); }
+
+  /* Module: licht kaartvlak, beeld 'contain' */
+  .module { padding: var(--space-s); border-radius: var(--radius); background: var(--color-surface); }
+  .module .media { background: transparent; }
+  .module .media :global(img) { object-fit: contain; }
+  .module { transition: background var(--duration) var(--ease), color var(--duration) var(--ease); }
+  .module .meta { color: var(--blue); font-weight: 700; }
+  .module .title { font-size: var(--step-3); }
+  .module .excerpt { color: inherit; }
+  /* Hover: blauw vlak met witte tekst (live) */
+  .module:hover, .module:has(.title a:focus-visible) { background: var(--blue); color: var(--white); }
+  .module:hover .meta, .module:has(.title a:focus-visible) .meta { color: var(--white); }
+  .module:hover .media :global(img) { scale: 1; }
+
+  /* Nieuws: brede kaart, tekst links en beeld rechts */
+  .news {
+    grid-template-columns: 1fr;
+    padding: var(--space-m);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+  @media (min-width: 48rem) { .news { grid-template-columns: 1fr minmax(0, 18rem); align-items: center; gap: var(--space-l); } }
+  .news .title { font-size: var(--step-2); max-inline-size: 30ch; }
+  .news .meta { display: flex; flex-wrap: wrap; gap: var(--space-s); margin-block-start: var(--space-xs); }
+  .news .source { position: relative; z-index: 1; color: var(--color-fg); }
+
+  /* Teamlid */
+  .person { border-radius: var(--radius); background: var(--color-surface); gap: 0; overflow: hidden; }
+  .person .media { border-radius: 0; aspect-ratio: 5 / 7; }
+  .person .body { padding: var(--space-s) var(--space-s) var(--space-m); }
+  .person .title { font-size: var(--step-1); }
+  .email { font-size: var(--step--1); }
+  .email a { color: var(--color-muted); text-decoration: none; }
+  .email a:hover { text-decoration: underline; }
+  .linkedin {
+    display: grid; place-items: center; justify-self: start;
+    inline-size: 2.75rem; block-size: 2.75rem; margin-block-start: var(--space-2xs);
+    border-radius: var(--radius-pill); background: var(--planet); color: var(--white);
+  }
+  .linkedin :global(svg) { inline-size: 1rem; block-size: 1rem; }
 </style>

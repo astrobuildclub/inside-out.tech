@@ -12,7 +12,21 @@ export default defineType({
     defineField({ name: "eyebrow", title: "Label boven de titel", type: "string" }),
     defineField({ name: "title", title: "Titel", type: "string", validation: (r) => r.required() }),
     defineField({ name: "intro", title: "Intro", type: "text", rows: 3 }),
-    imageField("image", "Beeld"),
+    defineField({
+      name: "layout",
+      title: "Opmaak",
+      type: "string",
+      initialValue: "stacked",
+      options: {
+        layout: "radio",
+        direction: "horizontal",
+        list: [
+          { title: "Onder elkaar", value: "stacked" },
+          { title: "Titel links, intro rechts", value: "split" },
+        ],
+      },
+    }),
+    imageField("image", "Achtergrondbeeld"),
     themeField("light"),
   ],
   preview: { select: { title: "title", subtitle: "eyebrow", media: "image" } },

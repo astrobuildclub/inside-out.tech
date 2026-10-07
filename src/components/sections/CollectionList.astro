@@ -1,4 +1,6 @@
 ---
+// Collectie. Kolommen per type zoals live: projecten 2, modules 3, team 4, nieuws als lijst.
+// Carousel (home-projecten): kop met knoppen links, kaarten rechts.
 import { stegaClean } from "@sanity/client/stega";
 import Section from "./Section.astro";
 import ItemCard from "../ItemCard.astro";
@@ -8,10 +10,12 @@ import type { Section as S } from "../../lib/sanity/queries";
 
 type Props = Extract<S, { _type: "collectionList" }>;
 const { title, intro, layout, limit, link, items = [], theme, collection } = Astro.props;
+const type = stegaClean(collection);
 const list = limit ? items.slice(0, limit) : items;
 const carousel = stegaClean(layout) === "carousel";
 const labels = { project: "Projecten", news: "Nieuws", module: "Modules", person: "Team" } as const;
-const label = title ?? labels[stegaClean(collection)] ?? "Overzicht";
+const label = title ?? labels[type] ?? "Overzicht";
+const columns = { project: "2", module: "3", person: "4", news: "1" }[type] ?? "3";
 ---
 <Section {theme}>
   <div class:list={["wrapper", carousel ? "split" : "stack"]}>
@@ -19,15 +23,17 @@ const label = title ?? labels[stegaClean(collection)] ?? "Overzicht";
       <div class="head" data-reveal>
         {title && <h2>{title}</h2>}
         {intro && <p class="intro">{intro}</p>}
-        <LinkButton {link} style="secondary" />
+        <LinkButton {link} style="secondary" arrow={false} />
       </div>
     )}
     {list.length === 0 ? (
       <p class="muted">Hier verschijnen binnenkort items.</p>
     ) : carousel ? (
-      <Carousel {label}>{list.map((item) => <li><ItemCard {item} /></li>)}</Carousel>
+      <Carousel {label} itemWidth="clamp(17rem, 26vw, 24rem)" controls="bottom">
+        {list.map((item) => <li><ItemCard {item} sizes="(min-width: 62rem) 26vw, 80vw" aspect={4 / 5} /></li>)}
+      </Carousel>
     ) : (
-      <ul role="list" class="grid-auto" style={stegaClean(collection) === "person" ? "--grid-min: 14rem" : undefined}>
+      <ul role="list" class="cols" data-cols={columns}>
         {list.map((item) => <li data-reveal><ItemCard {item} /></li>)}
       </ul>
     )}
@@ -37,8 +43,16 @@ const label = title ?? labels[stegaClean(collection)] ?? "Overzicht";
 <style>
   .stack { display: grid; gap: var(--space-l); }
   .split { display: grid; gap: var(--space-l); }
-  @media (min-width: 62rem) { .split { grid-template-columns: minmax(16rem, 1fr) 3fr; align-items: start; } }
+  @media (min-width: 62rem) { .split { grid-template-columns: minmax(14rem, 1fr) 3fr; align-items: start; } }
   .head { display: grid; gap: var(--space-s); justify-items: start; }
   h2 { font-size: var(--step-3); }
-  .grid-auto { --grid-min: 18rem; }
+  .head .intro { font-size: var(--step--1); color: var(--color-fg); }
+  .cols { display: grid; gap: var(--space-l) var(--space-m); grid-template-columns: 1fr; }
+  /* Projectkaarten staan live vlak naast elkaar */
+  .cols[data-cols="2"] { gap: var(--space-2xs); }
+  @media (min-width: 40rem) { .cols:not([data-cols="1"]) { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 62rem) {
+    .cols[data-cols="3"] { grid-template-columns: repeat(3, 1fr); }
+    .cols[data-cols="4"] { grid-template-columns: repeat(4, 1fr); }
+  }
 </style>

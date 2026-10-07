@@ -1,22 +1,42 @@
 /*
- * Sectiethema's (Webflow "parent modes"). Een sectie zet data-theme; de rollen
+ * Sectietonen (Webflow "parent modes"). Een sectie zet data-tone; de rollen
  * (--color-*) en de knopkleuren schuiven mee. "light" en "white" volgen licht/donker,
  * de merkvlakken (green, lemon, dark) zijn in beide modi gelijk.
+ * Niet data-theme: dat attribuut is van <html> (handmatige licht/donker-keuze, ThemeScript).
+ *
+ * light-dark() kijkt naar het color-scheme van het element zelf. Een witte kaart binnen
+ * een groene sectie erft anders "dark"; daarom zetten white/light het paginaschema terug.
  */
-[data-theme] { background: var(--color-bg); color: var(--color-fg); }
+:root { --page-scheme: light; } /* dark mode staat uit, zie tokens.scss */
 
-[data-theme='white'] {
+/* Basisrollen opnieuw zetten, zodat een lichte tone binnen een donkere sectie niets erft. */
+[data-tone='white'], [data-tone='light'] {
+  color-scheme: var(--page-scheme);
+  --color-fg: light-dark(var(--planet), var(--concrete));
+  --color-muted: light-dark(oklch(33.9% 0.062 178.5 / 0.75), oklch(93.4% 0.005 95.1 / 0.72));
+  --color-line: light-dark(oklch(33.9% 0.062 178.5 / 0.2), oklch(93.4% 0.005 95.1 / 0.2));
+  --color-accent: light-dark(var(--leaf), var(--lemon));
+  --color-focus: light-dark(var(--blue), var(--lemon));
+  --btn-bg: var(--lemon);
+  --btn-fg: var(--planet);
+  --btn-bg-hover: light-dark(var(--planet), var(--white));
+  --btn-fg-hover: light-dark(var(--white), var(--planet));
+  --btn-line: var(--color-accent);
+}
+[data-tone] { background: var(--color-bg); color: var(--color-fg); }
+
+[data-tone='white'] {
   --color-bg: light-dark(var(--white), var(--ink));
   --color-surface: light-dark(var(--concrete), oklch(25% 0.01 200));
 }
 
-[data-theme='light'] {
+[data-tone='light'] {
   --color-bg: light-dark(var(--concrete), oklch(23% 0.01 200));
   --color-surface: light-dark(var(--white), var(--ink));
 }
 
-[data-theme='green'],
-[data-theme='dark'] {
+[data-tone='green'],
+[data-tone='dark'] {
   color-scheme: dark;
   --color-bg: var(--planet);
   --color-surface: var(--planet-deep);
@@ -29,9 +49,9 @@
   --btn-fg-hover: var(--planet);
   --btn-line: var(--lemon);
 }
-[data-theme='dark'] { --color-bg: var(--ink); --color-surface: oklch(25% 0.01 200); }
+[data-tone='dark'] { --color-bg: var(--ink); --color-surface: oklch(25% 0.01 200); }
 
-[data-theme='lemon'] {
+[data-tone='lemon'] {
   color-scheme: light;
   --color-bg: var(--lemon);
   --color-surface: oklch(97% 0.12 123);

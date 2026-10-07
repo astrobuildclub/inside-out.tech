@@ -37,3 +37,6 @@ _webflow-export/
 
 # Cache van het importscript
 scripts/.cache/
+
+# Gelicenseerde fonts: niet in git (repo is openbaar). Zie scripts/fetch-fonts.mjs
+public/fonts/

@@ -8,13 +8,13 @@ const { media, label } = Astro.props;
 const items = (media ?? []).filter((m) => m?.asset);
 ---
 {items.length > 0 && (
-  <section class="section gallery" data-theme="white" aria-label={label}>
+  <section class="section gallery" data-tone="white" aria-label={label}>
     <div class="wrapper">
-      <Carousel {label} itemWidth="min(85vw, 40rem)" controls="bottom">
+      <Carousel {label} itemWidth="min(85vw, 56rem)" controls="bottom">
         {items.map((image) => (
           <li>
             <figure>
-              <div class="media-frame"><SanityImg {image} sizes="(min-width: 48rem) 40rem, 85vw" aspect={3 / 2} /></div>
+              <div class="media-frame"><SanityImg {image} sizes="(min-width: 62rem) 56rem, 85vw" aspect={4 / 3} /></div>
               {image.caption && <figcaption>{image.caption}</figcaption>}
             </figure>
           </li>
@@ -26,6 +26,6 @@ const items = (media ?? []).filter((m) => m?.asset);
 
 <style>
   .gallery { padding-block-start: 0; }
-  .media-frame { aspect-ratio: 3 / 2; }
+  .media-frame { aspect-ratio: 4 / 3; }
   figcaption { margin-block-start: var(--space-2xs); font-size: var(--step--1); color: var(--color-muted); }
 </style>

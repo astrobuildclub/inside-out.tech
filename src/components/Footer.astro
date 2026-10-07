@@ -19,7 +19,7 @@ const termsUrl = fileUrl(navigation.terms ?? undefined);
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer" data-theme="green">
+<footer class="site-footer" data-tone="green">
   <div class="wrapper grid">
     <div class="about">
       <a href="/" class="home" aria-label={`${settings.siteName}, naar de homepage`}><Logo class="logo" /></a>
@@ -46,7 +46,7 @@ const year = new Date().getFullYear();
       )}
     </div>
 
-    <div class="panel" data-theme="white">
+    <div class="panel" data-tone="white">
       <nav aria-label="Footermenu">
         <ul role="list">
           {(navigation.footer ?? []).map((link) => <li><a href={linkHref(link)}>{link.label}</a></li>)}
@@ -59,7 +59,7 @@ const year = new Date().getFullYear();
         </div>
       )}
       <div class="legal">
-        <p>© {year} {settings.siteName}</p>
+        <p>{year} © {settings.siteName} —</p>
         <ul role="list">
           {termsUrl && <li><a href={termsUrl} target="_blank" rel="noopener">{navigation.termsLabel ?? "Alg. voorwaarden"}</a></li>}
           {navigation.privacy && <li><a href={`/${navigation.privacy.slug}`}>{navigation.privacy.title}</a></li>}
@@ -74,13 +74,12 @@ const year = new Date().getFullYear();
 <style>
   .site-footer { padding-block: var(--space-2xl) var(--space-m); }
   .grid { display: grid; gap: var(--space-xl); }
-  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 36rem); align-items: end; } }
+  @media (min-width: 62rem) { .grid { grid-template-columns: 1fr minmax(0, 34rem); align-items: start; } }
 
-  .logo { inline-size: 10.5rem; block-size: auto; color: var(--white); margin-block-end: var(--space-l); }
+  .home :global(.logo) { inline-size: 10.5rem; block-size: auto; color: var(--white); margin-block-end: var(--space-l); }
   .home { display: inline-block; }
   address { font-style: normal; display: grid; gap: var(--space-s); font-size: var(--step--1); }
-  address a { text-decoration: none; }
-  address a:hover { text-decoration: underline; }
+  address a:hover { text-decoration-thickness: 2px; }
   .socials { display: flex; gap: var(--space-2xs); margin-block-start: var(--space-m); }
   .socials a {
     display: grid; place-items: center;
@@ -102,17 +101,17 @@ const year = new Date().getFullYear();
   .panel nav ul { display: grid; gap: 0.35em; }
   .panel nav a { text-decoration: none; }
   .panel nav a:hover { text-decoration: underline; }
-  .cta { display: grid; gap: var(--space-s); align-content: start; font-size: var(--step-0); font-weight: 500; line-height: var(--leading-snug); }
+  .cta { display: grid; gap: var(--space-m); align-content: start; font-size: var(--step-0); font-weight: 500; line-height: var(--leading-snug); }
   .cta :global(.button) { justify-self: start; }
   .legal {
     grid-column: 1 / -1;
-    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2xs) var(--space-m);
-    padding-block-start: var(--space-s);
-    border-block-start: 1px solid var(--color-line);
-    color: var(--color-muted);
-    font-size: 0.8125rem;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25em 0.75em;
+    font-size: 0.75rem;
   }
-  .legal ul { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-s); }
-  .legal a, .linklike { color: inherit; }
-  .linklike { background: none; border: 0; padding: 0; text-decoration: underline; cursor: pointer; font: inherit; }
+  .legal ul { display: contents; }
+  /* "identity & website by …" rechts, zoals live */
+  .legal li:last-child { margin-inline-start: auto; }
+  .legal a, .linklike { color: inherit; text-decoration: none; }
+  .legal a:hover, .linklike:hover { text-decoration: underline; }
+  .linklike { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
 </style>

@@ -25,6 +25,6 @@
 
 /* Brede container voor header/footer/rasters */
 .wrapper {
-  inline-size: min(100% - var(--gutter) * 2, calc(var(--content-width) + var(--popout-width) * 2 + var(--feature-width) * 2));
+  inline-size: min(100% - var(--gutter) * 2, var(--container-width));
   margin-inline: auto;
 }

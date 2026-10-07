@@ -1,39 +1,67 @@
 ---
+// Paginakop. "stacked": titel met intro eronder; "split": titel links, intro rechts (live: Plug & Play, Projecten, Nieuws).
+// Met beeld: foto als achtergrond met groene verloop-overlay, titel onderin (live: Over ons, projectdetail).
+import { stegaClean } from "@sanity/client/stega";
 import Section from "./Section.astro";
 import SanityImg from "../SanityImg.astro";
 import type { Section as S } from "../../lib/sanity/queries";
 
 type Props = Extract<S, { _type: "pageHeader" }> & { breadcrumbs?: { label: string; href?: string }[] };
-const { eyebrow, title, intro, image, theme = "green", breadcrumbs } = Astro.props;
+const { eyebrow, title, intro, image, theme = "green", breadcrumbs, layout } = Astro.props;
+const split = stegaClean(layout) === "split" && !image?.asset;
+// Korte titels ("contact", "Projecten") groot zoals live; lange titels een stap kleiner.
+const short = stegaClean(title).length <= 24;
 ---
-<Section theme={theme} class:list={["page-header", { "has-image": image?.asset }]}>
+<Section theme={image?.asset ? "green" : theme} class:list={["page-header", { "has-image": image?.asset, split, short }]}>
   {image?.asset && <div class="bg"><SanityImg {image} sizes="100vw" priority alt="" /></div>}
-  <div class="wrapper inner" data-reveal>
-    {breadcrumbs?.length ? (
-      <nav aria-label="Kruimelpad" class="crumbs">
-        <ol role="list">
-          {breadcrumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
-        </ol>
-      </nav>
-    ) : null}
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1>{title}</h1>
+  <div class="wrapper inner">
+    <div class="titles">
+      {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+      <h1>{title}</h1>
+      {breadcrumbs?.length ? (
+        <nav aria-label="Kruimelpad" class="crumbs">
+          <ol role="list">
+            {breadcrumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
+          </ol>
+        </nav>
+      ) : null}
+    </div>
     {intro && <p class="intro">{intro}</p>}
     <slot />
   </div>
 </Section>
 
 <style>
-  .page-header { position: relative; isolation: isolate; padding-block: var(--space-2xl) var(--space-xl); }
-  .page-header.has-image { min-block-size: clamp(20rem, 45vh, 32rem); display: grid; align-items: end; }
+  :global(.page-header) { position: relative; isolation: isolate; padding-block: var(--space-xl) var(--space-l); }
+  :global(.page-header.has-image) { min-block-size: 20rem; display: grid; align-items: end; }
+  @media (min-width: 62rem) { :global(.page-header.has-image) { min-block-size: 480px; } }
   .bg { position: absolute; inset: 0; z-index: -1; }
   .bg :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
-  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(33.9% 0.062 178.5 / 0.95), oklch(33.9% 0.062 178.5 / 0.35)); }
+  /* Neutrale donkere waas over de foto (live), onderin iets sterker voor de titel */
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, oklch(0% 0 0 / 0.55), oklch(0% 0 0 / 0.3) 50%, oklch(0% 0 0 / 0.2)); }
   .inner { display: grid; gap: var(--space-s); }
-  h1 { max-inline-size: 22ch; }
-  .eyebrow { color: var(--color-accent); }
-  .intro { color: var(--color-muted); max-inline-size: 52ch; }
-  .crumbs ol { display: flex; flex-wrap: wrap; gap: 0.5em; font-size: var(--step--1); color: var(--color-muted); }
-  .crumbs li + li::before { content: "›"; margin-inline-end: 0.5em; }
-  .crumbs a { color: inherit; }
+  .titles { display: grid; gap: var(--space-2xs); }
+  h1 { font-size: var(--step-3); max-inline-size: 30ch; }
+  :global(.page-header.short) h1, :global(.page-header.has-image) h1 { font-size: var(--step-5); }
+  .eyebrow { color: var(--color-accent); text-transform: none; letter-spacing: 0; }
+  .intro { color: var(--color-fg); font-size: var(--step-0); line-height: var(--leading-normal); max-inline-size: 48ch; }
+  /* Intro onder een korte titel (contact): groter, zoals live */
+  :global(.page-header.short:not(.split)) .intro { font-size: var(--step-1); line-height: var(--leading-snug); }
+  @media (min-width: 62rem) {
+    :global(.page-header.split) .inner { grid-template-columns: 1fr minmax(0, 32rem); align-items: start; gap: var(--space-xl); }
+  }
+  /* Kruimelpad als pill (live) */
+  .crumbs ol {
+    display: inline-flex; flex-wrap: wrap; gap: 0.5em;
+    margin-block-start: var(--space-xs);
+    padding: 0.7em 1.4em;
+    border-radius: var(--radius-pill);
+    background: var(--white); color: var(--planet);
+    font-size: var(--step-0);
+    font-weight: 500;
+  }
+  .crumbs ol { gap: 0.9em; }
+  .crumbs li + li::before { content: "›"; margin-inline-end: 0.9em; }
+  .crumbs a { color: inherit; text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
 </style>

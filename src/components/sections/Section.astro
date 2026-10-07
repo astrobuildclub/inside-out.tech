@@ -5,6 +5,6 @@ import type { Theme } from "../../lib/sanity/queries";
 interface Props { theme?: Theme; class?: string; label?: string; id?: string }
 const { theme = "white", class: className, label, id } = Astro.props;
 ---
-<section class:list={["section", className]} data-theme={stegaClean(theme)} aria-label={label} id={id}>
+<section class:list={["section", className]} data-tone={stegaClean(theme)} aria-label={label} id={id}>
   <slot />
 </section>

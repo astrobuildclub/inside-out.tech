@@ -1,6 +1,5 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import PageHeader from "../../components/sections/PageHeader.astro";
 import RichText from "../../components/RichText.astro";
 import SanityImg from "../../components/SanityImg.astro";
 import MediaGallery from "../../components/MediaGallery.astro";
@@ -23,12 +22,20 @@ const crumbs = [{ label: "Home", href: "/" }, { label: "Plug & Play", href: "/pl
   fallbackImage={mod.image}
   jsonLd={[breadcrumbJsonLd([{ name: "Plug & Play", path: "/plug-play" }, { name: mod.title, path: Astro.url.pathname }], Astro.site!)]}
 >
-  <PageHeader _type="pageHeader" _key="header" eyebrow={mod.type} title={mod.title} intro={mod.intro} breadcrumbs={crumbs} theme="green" />
+  <section class="section intro-block" data-tone="light">
+    <div class="wrapper head">
+      {mod.image?.asset && <div class="media"><SanityImg image={mod.image} sizes="(min-width: 62rem) 45vw, 100vw" priority /></div>}
+      <div class="titles">
+        <h1>{mod.title}</h1>
+        {mod.type && <p class="type">{mod.type}</p>}
+        {mod.intro && <p class="intro">{mod.intro}</p>}
+      </div>
+    </div>
+  </section>
 
-  <section class="section" data-theme="white">
+  <section class="section" data-tone="white">
     <div class="wrapper detail">
       <div class="content">
-        {mod.image?.asset && <div class="media media-frame"><SanityImg image={mod.image} sizes="(min-width: 62rem) 50vw, 100vw" priority /></div>}
         <RichText value={mod.content} />
       </div>
       {(mod.specs?.length || factsheet) && (
@@ -51,10 +58,21 @@ const crumbs = [{ label: "Home", href: "/" }, { label: "Plug & Play", href: "/pl
 
 <style>
   .detail { display: grid; gap: var(--space-xl); align-items: start; }
-  @media (min-width: 62rem) { .detail { grid-template-columns: 1fr 22rem; gap: var(--space-2xl); } .specs { position: sticky; inset-block-start: 6rem; } }
+  @media (min-width: 62rem) { .detail { grid-template-columns: 6fr 4fr; gap: var(--space-2xl); } .specs { position: sticky; inset-block-start: 7rem; max-inline-size: 26rem; } }
   .content { display: grid; gap: var(--space-l); }
-  .media { aspect-ratio: 4 / 3; }
-  .media :global(img) { object-fit: contain; }
-  .specs { display: grid; gap: var(--space-s); padding: var(--space-m); justify-items: start; }
+  .head { display: grid; gap: var(--space-xl); align-items: center; }
+  @media (min-width: 62rem) { .head { grid-template-columns: 1fr 1fr; } }
+  .head .media { aspect-ratio: 1; }
+  .head .media :global(img) { inline-size: 100%; block-size: 100%; object-fit: contain; }
+  .titles { display: grid; gap: var(--space-xs); }
+  h1 { font-size: var(--step-4); }
+  .type { color: var(--blue); font-weight: 700; font-size: var(--step--1); }
+  .intro { max-inline-size: 48ch; }
+  .crumbs ol { display: flex; flex-wrap: wrap; gap: 0.5em; font-size: var(--step--1); color: var(--color-muted); }
+  .crumbs li + li::before { content: "›"; margin-inline-end: 0.5em; }
+  .crumbs a { color: inherit; }
+  /* Specificaties als blauwe kaart (live) */
+  .specs { display: grid; gap: var(--space-s); padding: var(--space-m); justify-items: start; background: var(--blue); color: var(--white); }
   .specs h2 { font-size: var(--step-2); }
+  .specs .button { --btn-bg: var(--lemon); --btn-fg: var(--planet); }
 </style>

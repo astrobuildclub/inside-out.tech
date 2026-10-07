@@ -11,6 +11,7 @@ export default defineType({
   fields: [
     defineField({ name: "title", title: "Titel", type: "string" }),
     defineField({ name: "items", title: "Punten", type: "array", of: [defineArrayMember({ type: "string" })] }),
+    defineField({ name: "text", title: "Tekst boven de knop", type: "string" }),
     defineField({ name: "link", title: "Knop", type: "link" }),
     themeField("lemon"),
   ],

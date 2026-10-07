@@ -24,6 +24,13 @@ export default defineType({
       },
     }),
     imageField("image", "Beeld"),
+    defineField({
+      name: "imagePosition",
+      title: "Positie beeld",
+      type: "string",
+      initialValue: "right",
+      options: { layout: "radio", direction: "horizontal", list: [{ title: "Links", value: "left" }, { title: "Rechts", value: "right" }] },
+    }),
     themeField("light"),
   ],
   preview: {

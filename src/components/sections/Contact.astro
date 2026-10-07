@@ -40,14 +40,14 @@ const a = settings.address;
         <p class="error" id="cf-message-error" hidden>Vul een bericht in.</p>
       </div>
       <p class="muted small">Velden met * zijn verplicht. We gebruiken je gegevens alleen om contact met je op te nemen.</p>
-      <button type="submit" class="button" data-style="primary">Verstuur</button>
+      <button type="submit" class="button submit">Verstuur</button>
       <p class="status" role="status" data-status data-success={successMessage ?? "Bedankt! We nemen zo snel mogelijk contact met je op."}></p>
     </form>
 
     <aside class="info" aria-label="Contactgegevens">
       {mapImage?.asset && (
-        <a href={mapUrl} class="map media-frame" target="_blank" rel="noopener">
-          <SanityImg image={mapImage} sizes="(min-width: 62rem) 35vw, 100vw" alt="" />
+        <a href={mapUrl} class="map" target="_blank" rel="noopener">
+          <SanityImg image={mapImage} sizes="(min-width: 62rem) 30vw, 100vw" alt="" />
           <span class="visually-hidden">Bekijk de locatie op Google Maps (opent in nieuw venster)</span>
         </a>
       )}
@@ -57,6 +57,7 @@ const a = settings.address;
         {settings.telephone && (<><dt>Telefoon</dt><dd><a href={telHref(settings.telephone)}>{settings.telephone}</a></dd></>)}
         {settings.email && (<><dt>E-mail</dt><dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd></>)}
       </dl>
+
     </aside>
   </div>
 </Section>
@@ -105,8 +106,12 @@ const a = settings.address;
 
 <style>
   .grid { display: grid; gap: var(--space-2xl); }
-  @media (min-width: 62rem) { .grid { grid-template-columns: 3fr 2fr; } }
-  form { display: grid; gap: var(--space-s); align-content: start; justify-items: start; }
+  @media (min-width: 62rem) { .grid { grid-template-columns: 7fr 4fr; gap: var(--space-l); align-items: start; } }
+  form { display: grid; gap: var(--space-s); align-content: start; justify-items: start; padding: var(--space-l); border-radius: var(--radius); background: var(--color-surface); }
+  form input, form textarea { background: var(--color-bg); border-color: transparent; }
+  form input { border-radius: var(--radius-pill); }
+  /* Donkere verstuurknop (live) */
+  .submit { --btn-bg: var(--planet); --btn-fg: var(--white); --btn-bg-hover: var(--leaf); --btn-fg-hover: var(--white); }
   h2 { font-size: var(--step-3); }
   .field { display: grid; gap: var(--space-3xs); inline-size: 100%; }
   label { font-weight: 500; font-size: var(--step--1); }
@@ -125,9 +130,13 @@ const a = settings.address;
   .status:empty { display: none; }
   .status { padding: var(--space-xs) var(--space-s); border-radius: var(--radius-s); background: var(--color-surface); }
   .status[data-state="ok"] { background: var(--lemon); color: var(--planet); }
-  .info { display: grid; gap: var(--space-l); align-content: start; }
+  /* Kaartbeeld + gegevens samen in één lemon-kaart (live) */
+  .info { display: grid; align-content: start; border-radius: var(--radius); overflow: hidden; background: var(--lemon); color: var(--planet); }
+  dl { padding: var(--space-m); }
+  dl a { color: var(--blue); }
   .map { display: block; aspect-ratio: 4 / 3; }
+  .map :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
   dl { display: grid; gap: var(--space-2xs); }
-  dt { font-weight: 500; color: var(--color-accent); font-size: var(--step--1); }
+  dt { font-weight: 700; font-size: var(--step--1); }
   dd + dt { margin-block-start: var(--space-s); }
 </style>
