@@ -10,6 +10,16 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 ### Toegevoegd
 - `PRODUCT.md`: productcontext (doelgroepen, positionering, bewijs, merkafspraken) voor design-werk met Impeccable.
 
+### Gewijzigd
+- Typehiërarchie: hero-h1 is nu de grootste kop (`--step-4`); de koppen van Checklist en CTA gaan naar `--step-3`, de kaartkoppen van CardGrid en UspGrid naar `--step-2`. Koppen krijgen `text-wrap: balance`.
+- Regelafstand van grote lopende tekst (intro's, leads, lemon-intro, footer-CTA) van 1.25 naar 1.4 (nieuw token `--leading-lead`); de kleine projectintro naar 1.5.
+- Projectcarousel: kaarten worden niet meer opgerekt (geen lege ruimte boven de knoppen), de samenvatting staat op 3 regels en er is een positie-indicator ("1–2 / 7").
+- Checklist-paneel: de CTA-zin is wit, zodat de lemon-kop het paneel leidt.
+
+### Opgelost
+- Hoofdmenu brak af op ~992–1150px ("Plug & Play", "Over ons").
+- Losse streep na "© Inside Out" in de footer.
+
 ### Onderhoud
 - `.impeccable/` in `.gitignore` (lokale critique-snapshots).
 

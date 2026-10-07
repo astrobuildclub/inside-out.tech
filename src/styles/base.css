@@ -16,6 +16,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 500;
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
 }
 h1, .h1 { font-size: var(--step-5); }
 h2, .h2 { font-size: var(--step-4); }
@@ -43,7 +44,7 @@ hr { border: 0; border-block-start: var(--border-width) solid var(--color-line);
 .prose > * + * { margin-block-start: 1em; }
 .prose :is(h2, h3, h4) { margin-block-start: 1.75em; font-size: var(--step-1); font-weight: 700; }
 .prose :is(h2, h3, h4) + * { margin-block-start: 0.5em; }
-.prose .lead { font-size: var(--step-1); line-height: var(--leading-snug); }
+.prose .lead { font-size: var(--step-1); line-height: var(--leading-lead); }
 .prose ul, .prose ol { padding-inline-start: 1.25em; }
 .prose li + li { margin-block-start: 0.35em; }
 .prose a { color: var(--color-accent); }
@@ -57,4 +58,4 @@ hr { border: 0; border-block-start: var(--border-width) solid var(--color-line);
   color: var(--color-accent);
 }
 
-.intro { font-size: var(--step-1); line-height: var(--leading-snug); color: var(--color-muted); max-inline-size: 48ch; }
+.intro { font-size: var(--step-1); line-height: var(--leading-lead); color: var(--color-muted); max-inline-size: 48ch; }
