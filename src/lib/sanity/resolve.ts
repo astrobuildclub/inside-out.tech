@@ -30,7 +30,7 @@ export const resolve: PresentationPluginOptions["resolve"] = {
   mainDocuments: defineDocuments([
     { route: "/", filter: `_type == "page" && slug.current == "home"` },
     { route: "/projecten/:slug", filter: `_type == "project" && slug.current == $slug` },
-    { route: "/plug-play/:slug", filter: `_type == "module" && slug.current == $slug` },
+    { route: "/modules/:slug", filter: `_type == "module" && slug.current == $slug` },
     { route: "/nieuws/:slug", filter: `_type == "news" && slug.current == $slug` },
     { route: "/:slug", filter: `_type == "page" && slug.current == $slug` },
   ]),

@@ -9,7 +9,7 @@ export default defineType({
   type: "object",
   icon: BellIcon,
   fields: [
-    defineField({ name: "title", title: "Titel", type: "string", validation: (r) => r.required() }),
+    defineField({ name: "title", title: "Titel", type: "string", description: "Zet woorden tussen *sterretjes* voor de lemon-streep eronder.", validation: (r) => r.required() }),
     defineField({ name: "text", title: "Tekst", type: "text", rows: 3 }),
     defineField({ name: "link", title: "Knop", type: "link" }),
     imageField("image", "Foto (optioneel)"),

@@ -45,18 +45,18 @@ const a = settings.address;
     </form>
 
     <aside class="info" aria-label="Contactgegevens">
-      {mapImage?.asset && (
-        <a href={mapUrl} class="map media-frame" target="_blank" rel="noopener">
-          <SanityImg image={mapImage} sizes="(min-width: 62rem) 35vw, 100vw" alt="" />
-          <span class="visually-hidden">Bekijk de locatie op Google Maps (opent in nieuw venster)</span>
-        </a>
-      )}
       <dl>
         {a?.street && (<><dt>Adres</dt><dd>{settings.companyName && <>{settings.companyName}<br /></>}{a.street}<br />{a.postalCode} {a.city}</dd></>)}
         {openingHours && (<><dt>Bereikbaarheid</dt><dd>{openingHours}</dd></>)}
         {settings.telephone && (<><dt>Telefoon</dt><dd><a href={telHref(settings.telephone)}>{settings.telephone}</a></dd></>)}
         {settings.email && (<><dt>E-mail</dt><dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd></>)}
       </dl>
+      {mapImage?.asset && (
+        <a href={mapUrl} class="map media-frame" target="_blank" rel="noopener">
+          <SanityImg image={mapImage} sizes="(min-width: 62rem) 35vw, 100vw" alt="" />
+          <span class="visually-hidden">Bekijk de locatie op Google Maps (opent in nieuw venster)</span>
+        </a>
+      )}
     </aside>
   </div>
 </Section>
@@ -106,7 +106,8 @@ const a = settings.address;
 <style>
   .grid { display: grid; gap: var(--space-2xl); }
   @media (min-width: 62rem) { .grid { grid-template-columns: 3fr 2fr; } }
-  form { display: grid; gap: var(--space-s); align-content: start; justify-items: start; }
+  form { display: grid; gap: var(--space-s); align-content: start; justify-items: start; padding: var(--space-l); border-radius: var(--radius); background: var(--color-surface); }
+  form input, form textarea { background: var(--color-bg); }
   h2 { font-size: var(--step-3); }
   .field { display: grid; gap: var(--space-3xs); inline-size: 100%; }
   label { font-weight: 500; font-size: var(--step--1); }
@@ -126,8 +127,11 @@ const a = settings.address;
   .status { padding: var(--space-xs) var(--space-s); border-radius: var(--radius-s); background: var(--color-surface); }
   .status[data-state="ok"] { background: var(--lemon); color: var(--planet); }
   .info { display: grid; gap: var(--space-l); align-content: start; }
+  /* Contactgegevens in een lemon-kaart (live) */
+  dl { padding: var(--space-m); border-radius: var(--radius); background: var(--lemon); color: var(--planet); }
+  dl a { color: inherit; }
   .map { display: block; aspect-ratio: 4 / 3; }
   dl { display: grid; gap: var(--space-2xs); }
-  dt { font-weight: 500; color: var(--color-accent); font-size: var(--step--1); }
+  dt { font-weight: 700; font-size: var(--step--1); }
   dd + dt { margin-block-start: var(--space-s); }
 </style>

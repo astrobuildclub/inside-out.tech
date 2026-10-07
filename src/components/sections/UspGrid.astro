@@ -22,7 +22,7 @@ const { title, items, theme = "green" } = Astro.props;
 <style>
   .stack { display: grid; gap: var(--space-l); }
   h2 { font-size: var(--step-3); }
-  .usps { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
+  .usps { display: grid; gap: var(--space-m); grid-template-columns: repeat(auto-fit, minmax(min(100%, 30rem), 1fr)); }
   .usp {
     display: grid; gap: var(--space-s); align-content: start;
     padding: var(--space-l);
@@ -30,5 +30,5 @@ const { title, items, theme = "green" } = Astro.props;
     background: var(--lemon);
     color: var(--planet);
   }
-  h3 { font-size: var(--step-2); max-inline-size: 18ch; }
+  h3 { font-size: var(--step-3); max-inline-size: 16ch; }
 </style>

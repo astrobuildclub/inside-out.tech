@@ -21,6 +21,14 @@ export default defineType({
       options: { layout: "radio", direction: "horizontal", list: [{ title: "Links", value: "left" }, { title: "Rechts", value: "right" }] },
     }),
     defineField({ name: "buttons", title: "Knoppen", type: "array", of: [defineArrayMember({ type: "link" })] }),
+    defineField({
+      name: "align",
+      title: "Uitlijning",
+      type: "string",
+      initialValue: "start",
+      description: "Gecentreerd werkt alleen zonder beeld en zonder tweede kolom.",
+      options: { layout: "radio", direction: "horizontal", list: [{ title: "Links", value: "start" }, { title: "Gecentreerd", value: "center" }] },
+    }),
     themeField("light"),
   ],
   preview: {

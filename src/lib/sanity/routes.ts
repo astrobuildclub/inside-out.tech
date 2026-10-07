@@ -2,7 +2,7 @@
 export const routes = {
   page: (slug: string) => (slug === "home" ? "/" : `/${slug}`),
   project: (slug: string) => `/projecten/${slug}`,
-  module: (slug: string) => `/plug-play/${slug}`,
+  module: (slug: string) => `/modules/${slug}`, // zelfde pad als in Webflow
   news: (slug: string) => `/nieuws/${slug}`,
 } as const;
 

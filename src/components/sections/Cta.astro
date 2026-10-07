@@ -8,12 +8,14 @@ import type { Section as S } from "../../lib/sanity/queries";
 type Props = Omit<Extract<S, { _type: "cta" }>, "_key"> & { _key?: string };
 const { title, text, link, image, theme = "white" } = Astro.props;
 const hasImage = !!image?.asset;
+// *woord* → lemon-streep eronder (zoals in de hero)
+const parts = title.split("*").map((text, i) => ({ text, highlight: i % 2 === 1 }));
 ---
 <Section {theme}>
   <div class="wrapper">
     <div class:list={["panel", { "has-image": hasImage }]} data-tone={hasImage ? undefined : "lemon"} data-reveal>
       <div class="text">
-        <h2>{title}</h2>
+        <h2>{parts.map((p) => (p.highlight ? <span class="highlight">{p.text}</span> : p.text))}</h2>
         {text && <p>{text}</p>}
         <LinkButton {link} />
       </div>
@@ -24,9 +26,12 @@ const hasImage = !!image?.asset;
 
 <style>
   .panel { display: grid; gap: var(--space-l); align-items: center; border-radius: var(--radius); }
-  .panel:not(.has-image) { padding: var(--space-xl) var(--space-l); }
+  /* Lemon-kaart zonder foto: gecentreerd, zoals live */
+  .panel:not(.has-image) { padding: var(--space-xl) var(--space-l); justify-items: center; text-align: center; }
+  .panel:not(.has-image) .text { justify-items: center; max-inline-size: 48rem; }
   @media (min-width: 62rem) { .panel.has-image { grid-template-columns: 1fr 1fr; gap: var(--space-2xl); } }
   .text { display: grid; gap: var(--space-s); justify-items: start; max-inline-size: 40rem; }
   h2 { font-size: var(--step-3); }
+  .has-image h2 { font-size: var(--step-4); }
   .media { aspect-ratio: 4 / 3; }
 </style>

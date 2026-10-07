@@ -7,12 +7,13 @@ import LinkButton from "../LinkButton.astro";
 import type { Section as S } from "../../lib/sanity/queries";
 
 type Props = Extract<S, { _type: "textMedia" }>;
-const { title, body, bodySecondary, image, imagePosition, buttons, theme } = Astro.props;
+const { title, body, bodySecondary, image, imagePosition, buttons, theme, align } = Astro.props;
 const hasImage = !!image?.asset;
 const twoCols = !hasImage && !!bodySecondary?.length;
+const centered = stegaClean(align) === "center" && !hasImage && !twoCols;
 ---
 <Section {theme}>
-  <div class:list={["wrapper grid", { "has-image": hasImage, "two-cols": twoCols, "image-left": stegaClean(imagePosition) === "left" }]}>
+  <div class:list={["wrapper grid", { "has-image": hasImage, "two-cols": twoCols, centered, "image-left": stegaClean(imagePosition) === "left" }]}>
     <div class="text" data-reveal>
       {title && <h2>{title}</h2>}
       <RichText value={body} />
@@ -31,7 +32,13 @@ const twoCols = !hasImage && !!bodySecondary?.length;
 <style>
   .grid { display: grid; gap: var(--space-xl); align-items: start; }
   .text { display: grid; gap: var(--space-m); }
-  h2 { font-size: var(--step-3); max-inline-size: 20ch; }
+  h2 { font-size: var(--step-2); max-inline-size: 28ch; }
+  /* Gecentreerd (live: lemon-intro op home, intro op Op maat) */
+  .centered { justify-items: center; text-align: center; }
+  .centered .text { justify-items: center; max-inline-size: 56rem; }
+  .centered h2 { font-size: var(--step-3); max-inline-size: 32ch; }
+  .centered :global(.prose) { max-inline-size: 60ch; font-size: var(--step-1); line-height: var(--leading-snug); }
+  .centered .buttons { justify-content: center; }
   @media (min-width: 62rem) {
     .grid.has-image, .grid.two-cols { grid-template-columns: 1fr 1fr; }
     .grid.has-image { align-items: center; }

@@ -105,7 +105,7 @@ type Base<T extends string> = { _type: T; _key: string; theme?: Theme };
 
 export type Section =
   | (Base<"hero"> & { title: string; buttons?: Link[]; videoMp4?: SanityFile; videoWebm?: SanityFile; image?: SanityImage })
-  | (Base<"pageHeader"> & { eyebrow?: string; title: string; intro?: string; image?: SanityImage })
+  | (Base<"pageHeader"> & { eyebrow?: string; title: string; intro?: string; image?: SanityImage; layout?: "stacked" | "split" })
   | (Base<"textMedia"> & {
       title?: string;
       body?: PortableTextBlock[];
@@ -113,6 +113,7 @@ export type Section =
       image?: SanityImage;
       imagePosition?: "left" | "right";
       buttons?: Link[];
+      align?: "start" | "center";
     })
   | (Base<"cardGrid"> & {
       title?: string;
@@ -120,7 +121,7 @@ export type Section =
       cards?: { _key: string; image?: SanityImage; title: string; text?: string; bullets?: string[]; link?: Link }[];
     })
   | (Base<"uspGrid"> & { title?: string; items?: { _key: string; title: string; text?: string }[] })
-  | (Base<"checklist"> & { title?: string; items?: string[]; link?: Link })
+  | (Base<"checklist"> & { title?: string; items?: string[]; text?: string; link?: Link })
   | (Base<"cta"> & { title: string; text?: string; link?: Link; image?: SanityImage })
   | (Base<"collectionList"> & {
       collection: CardItem["_type"];
@@ -142,6 +143,7 @@ export type Section =
       intro?: PortableTextBlock[];
       list: string;
       image?: SanityImage;
+      imagePosition?: "left" | "right";
       items?: { _id: string; number: number; title: string; description?: PortableTextBlock[] }[];
     })
   | (Base<"contact"> & { formTitle?: string; successMessage?: string; openingHours?: string; mapImage?: SanityImage; mapUrl?: string });

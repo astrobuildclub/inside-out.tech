@@ -65,7 +65,7 @@ _webflow-export/    Originele Webflow-export (niet in git)
 ## Content en CMS
 
 - **Pagina's** (page builder): home, over ons, contact, nieuws, projecten, installatiepartners (`/installateur`), bouwpartners (`/vastgoedbeheer`), plug & play, op maat, privacy. Secties: hero, paginakop, tekst (+ beeld), kaarten, voordelen, checklist, call-to-action, collectie, logo's, stappen, contactformulier.
-- **Collecties:** projecten (`/projecten/<slug>`), modules (`/plug-play/<slug>`), nieuws (`/nieuws/<slug>`), team, opdrachtgevers & partners, stappen (RGS-fasen en stappenplan installatiepartners).
+- **Collecties:** projecten (`/projecten/<slug>`), modules (`/modules/<slug>`), nieuws (`/nieuws/<slug>`), team, opdrachtgevers & partners, stappen (RGS-fasen en stappenplan installatiepartners).
 - **Site-instellingen** en **Navigatie** als singletons.
 - Site-instellingen, SEO-velden en Visual Editing volgens `~/Code/_standards/SANITY.md`: ja.
 

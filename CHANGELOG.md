@@ -19,6 +19,10 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Importscript `scripts/import-webflow.mjs` voor CSV-content, vaste pagina's, beelden, video en PDF.
 
 ### Gewijzigd
+- Live (inside-out.tech) is de bron: gepubliceerde content gelijk aan live (stappenplan installatiepartners, RGS-fase 3, io Charlie/Echo gepubliceerd, nieuwsbronnen en -datums, volgorde projecten en team, paginatitels). Waar de testexport afwijkt staat die versie als Sanity-draft.
+- Layout gelijkgetrokken met live: paginakoppen (stacked/split, wit/licht/groen), kleinere typografie, gecentreerde lemon-intro en -CTA, projectkaarten zonder vlak (2 kolommen), modules 3 kolommen, team 4 kolommen met e-mail, nieuws als brede kaarten met bron, voordelen in 2 kolommen, stappen als witte kaarten, moduledetail met beeld links, feitenblok projecten als groene kaart, contactgegevens in lemon-kaart.
+- Modules staan op `/modules/<slug>` (zelfde pad als Webflow).
+- Nieuwe schemavelden: paginakop `layout`, tekst `align`, checklist `text`, stappen `imagePosition`; `*woord*` in CTA-titels geeft de lemon-streep.
 - Webflow-content geïmporteerd in Sanity (`cf1ukp64/production`): 63 documenten, beelden, homevideo en voorwaarden-PDF.
 - Sectie-attribuut heet nu `data-tone` (was `data-theme`, botste met de licht/donker-keuze op `<html>`); lichte tones zetten kleurschema en rollen expliciet terug, zodat een wit vlak in een groene sectie niet donker wordt.
 - Geen fade-in meer op hero en paginakop (sneller zichtbaar boven de vouw).
@@ -38,7 +42,6 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 
 ### Open punten
 - Privacyverklaring: tekst nodig van de klant (pagina staat er met noindex).
-- Stappenplan installatiepartners staat in Webflow volledig op Draft: publiceren of sectie weghalen.
 - Alt-teksten bij CMS-beelden (projecten, nieuws, modules) ontbreken in Webflow: aanvullen in de Studio.
 - Live-URL's van Webflow controleren voor redirects (Webflow-CMS-paden kunnen afwijken).
 - Fonts naar woff2, video comprimeren (nu 14 + 20 MB).

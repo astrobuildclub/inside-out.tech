@@ -36,14 +36,17 @@ const jsonLd = [
 ];
 ---
 <BaseLayout title={post.title} seo={post.seo} fallbackDescription={post.intro} fallbackImage={post.image} type="article" {jsonLd}>
-  <PageHeader _type="pageHeader" _key="header" title={post.title} intro={post.intro} breadcrumbs={crumbs} theme="green">
+  <PageHeader _type="pageHeader" _key="header" title={post.title} intro={post.intro} breadcrumbs={crumbs} theme="white">
     <p class="date"><time datetime={published}>{date}</time></p>
   </PageHeader>
+
+  {post.image?.asset && (
+    <div class="wrapper hero-image media-frame"><SanityImg image={post.image} sizes="100vw" aspect={16 / 7} priority /></div>
+  )}
 
   <section class="section" data-tone="white">
     <div class="wrapper detail">
       <article class="content">
-        {post.image?.asset && <div class="media media-frame"><SanityImg image={post.image} sizes="(min-width: 62rem) 46rem, 100vw" priority /></div>}
         <RichText value={post.content} />
         {source && (
           <p>
@@ -70,7 +73,7 @@ const jsonLd = [
   .detail { display: grid; gap: var(--space-2xl); align-items: start; }
   @media (min-width: 62rem) { .detail { grid-template-columns: minmax(0, 46rem) 20rem; justify-content: space-between; } }
   .content { display: grid; gap: var(--space-l); }
-  .media { aspect-ratio: 16 / 9; }
+  .hero-image { aspect-ratio: 16 / 7; }
   .related { display: grid; gap: var(--space-s); }
   .related h2 { font-size: var(--step-1); letter-spacing: 0; }
   .related ul { display: grid; gap: var(--space-m); }
