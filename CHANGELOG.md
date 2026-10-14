@@ -9,6 +9,7 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 
 ### Toegevoegd
 - `staging`-branch als branch deploy op Netlify; werkwijze in README en AGENTS.md: feature-PR's gaan naar `staging`, daarna `staging` → `main`.
+- Paginatransities met Interlude (laag 3b uit `_standards/TRANSITIONS.md`, commit `3f1a9ce`): `columns` in `--lemon`, `gsap` als dependency. Uit in Visual Editing.
 - `PRODUCT.md`: productcontext (doelgroepen, positionering, bewijs, merkafspraken) voor design-werk met Impeccable.
 
 ### Gewijzigd
@@ -27,6 +28,9 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 - Een kop als eerste blok in rich text kreeg een bovenmarge en lijnde niet uit met de buurkolom.
 - Hoofdmenu brak af op ~992–1150px ("Plug & Play", "Over ons").
 - Losse streep na "© Inside Out" in de footer.
+
+### Verwijderd
+- Voortgangsbalk (`PageProgress.astro`, `page-transitions.ts`): vervangen door Interlude.
 
 ### Onderhoud
 - `.impeccable/` in `.gitignore` (lokale critique-snapshots).
