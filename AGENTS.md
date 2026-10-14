@@ -8,7 +8,7 @@ Lees eerst `README.md` voor context en `CHANGELOG.md` voor recente wijzigingen.
 - Stack: Astro 7.3, Sanity 6.18 (Studio op `/admin`), Node 22 (zie `.nvmrc`)
 
 ## Werkwijze
-- Werk nooit direct op `main`. Branch → PR → deploy preview → merge.
+- Werk nooit direct op `main` of `staging`. Branch → PR naar `staging` → deploy preview → merge → staging checken → PR `staging` → `main`.
 - Branchnamen: `feat/…`, `fix/…`, `chore/…`, `docs/…`.
 - Commit nooit `.env`-bestanden of tokens. Nieuwe variabelen: naam toevoegen aan `.env.example` en de README-tabel.
 - Variabelen met `PUBLIC_` komen in de browser terecht: nooit voor tokens.

@@ -8,6 +8,7 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 ## [Unreleased]
 
 ### Toegevoegd
+- `staging`-branch als branch deploy op Netlify; werkwijze in README en AGENTS.md: feature-PR's gaan naar `staging`, daarna `staging` → `main`.
 - `PRODUCT.md`: productcontext (doelgroepen, positionering, bewijs, merkafspraken) voor design-werk met Impeccable.
 
 ### Gewijzigd
