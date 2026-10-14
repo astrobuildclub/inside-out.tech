@@ -89,8 +89,8 @@ Herhaalbaar (vaste `_id`'s, `createOrReplace`), maar overschrijft dan wijziginge
 
 ## Deploy
 
-- `main` → productie (Netlify) · pull requests → deploy preview
-- Werkwijze: branch → PR → preview checken → merge
+- `main` → productie (Netlify) · `staging` → [staging--insideout-tech.netlify.app](https://staging--insideout-tech.netlify.app) (branch deploy) · pull requests → deploy preview
+- Werkwijze: branch → PR naar `staging` → preview checken → merge → staging checken → PR `staging` → `main`
 
 ## Bekende issues en afspraken
 

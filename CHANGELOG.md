@@ -8,10 +8,32 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 ## [Unreleased]
 
 ### Toegevoegd
+- `staging`-branch als branch deploy op Netlify; werkwijze in README en AGENTS.md: feature-PR's gaan naar `staging`, daarna `staging` → `main`.
 - Paginatransities met Interlude (laag 3b uit `_standards/TRANSITIONS.md`, commit `3f1a9ce`): `columns` in `--lemon`, `gsap` als dependency. Uit in Visual Editing.
+- `PRODUCT.md`: productcontext (doelgroepen, positionering, bewijs, merkafspraken) voor design-werk met Impeccable.
+
+### Gewijzigd
+- Typehiërarchie: hero-h1 is nu de grootste kop (`--step-4`); de koppen van Checklist en CTA gaan naar `--step-3`, de kaartkoppen van CardGrid en UspGrid naar `--step-2`. Koppen krijgen `text-wrap: balance`.
+- Regelafstand van grote lopende tekst (intro's, leads, lemon-intro, footer-CTA) van 1.25 naar 1.4 (nieuw token `--leading-lead`); de kleine projectintro naar 1.5.
+- Projectcarousel: kaarten worden niet meer opgerekt (geen lege ruimte boven de knoppen), de samenvatting staat op 3 regels en er is een positie-indicator ("1–2 / 7").
+- Checklist-paneel: de CTA-zin is wit, zodat de lemon-kop het paneel leidt.
+
+- Paginakoppen: meer ruimte boven en onder (`--space-2xl` / `--space-xl`); lange titels een stap groter (`--step-4`), zodat de h1 overal boven de sectiekoppen staat.
+- Sectiekoppen overal `--step-3` (TextMedia en Steps waren `--step-2`); titels van modulekaarten `--step-2`.
+- Kruimelpad als eigen component (`Breadcrumbs.astro`): altijd één regel (de paginatitel kort in met "…"), op lichte vlakken met de oppervlaktekleur; nu ook op moduledetailpagina's.
+- Gerelateerd nieuws in de smalle kolom: kaart gestapeld met kleinere titel.
+
+### Opgelost
+- Kruimelpad was onzichtbaar (wit op wit) en verspringend op witte paginakoppen, en brak op mobiel over twee regels.
+- Een kop als eerste blok in rich text kreeg een bovenmarge en lijnde niet uit met de buurkolom.
+- Hoofdmenu brak af op ~992–1150px ("Plug & Play", "Over ons").
+- Losse streep na "© Inside Out" in de footer.
 
 ### Verwijderd
 - Voortgangsbalk (`PageProgress.astro`, `page-transitions.ts`): vervangen door Interlude.
+
+### Onderhoud
+- `.impeccable/` in `.gitignore` (lokale critique-snapshots).
 
 ## [2026-10-07]
 

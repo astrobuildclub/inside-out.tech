@@ -77,4 +77,8 @@ const jsonLd = [
   .related { display: grid; gap: var(--space-s); }
   .related h2 { font-size: var(--step-1); letter-spacing: 0; }
   .related ul { display: grid; gap: var(--space-m); }
+  /* Smalle kolom: kaart gestapeld (beeld boven), titel een stap kleiner */
+  .related :global(.news) { grid-template-columns: 1fr; gap: var(--space-s); padding: var(--space-s); }
+  .related :global(.news .media) { order: -1; }
+  .related :global(.news .title) { font-size: var(--step-1); }
 </style>

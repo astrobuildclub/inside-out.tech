@@ -59,7 +59,7 @@ const year = new Date().getFullYear();
         </div>
       )}
       <div class="legal">
-        <p>{year} © {settings.siteName} —</p>
+        <p>{year} © {settings.siteName}</p>
         <ul role="list">
           {termsUrl && <li><a href={termsUrl} target="_blank" rel="noopener">{navigation.termsLabel ?? "Alg. voorwaarden"}</a></li>}
           {navigation.privacy && <li><a href={`/${navigation.privacy.slug}`}>{navigation.privacy.title}</a></li>}
@@ -101,7 +101,7 @@ const year = new Date().getFullYear();
   .panel nav ul { display: grid; gap: 0.35em; }
   .panel nav a { text-decoration: none; }
   .panel nav a:hover { text-decoration: underline; }
-  .cta { display: grid; gap: var(--space-m); align-content: start; font-size: var(--step-0); font-weight: 500; line-height: var(--leading-snug); }
+  .cta { display: grid; gap: var(--space-m); align-content: start; font-size: var(--step-0); font-weight: 500; line-height: var(--leading-lead); }
   .cta :global(.button) { justify-self: start; }
   .legal {
     grid-column: 1 / -1;

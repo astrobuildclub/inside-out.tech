@@ -17,7 +17,8 @@
   /* Typografie */
   --font-sans: 'Haffer SQ', ui-sans-serif, system-ui, sans-serif;
   --leading-tight: 1.1;
-  --leading-snug: 1.25;
+  --leading-snug: 1.25;  /* korte, grote regels: kaarttitels */
+  --leading-lead: 1.4;   /* grote lopende tekst (intro's, leads) */
   --leading-normal: 1.5;
   --tracking-tight: -0.03em;
   --measure: 62ch;

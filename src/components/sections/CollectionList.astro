@@ -43,10 +43,12 @@ const columns = { project: "2", module: "3", person: "4", news: "1" }[type] ?? "
 <style>
   .stack { display: grid; gap: var(--space-l); }
   .split { display: grid; gap: var(--space-l); }
+  /* Carousel: samenvatting op drie regels, zodat de kaarten even hoog ogen (volledige tekst op de detailpagina) */
+  .split :global(.excerpt) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
   @media (min-width: 62rem) { .split { grid-template-columns: minmax(14rem, 1fr) 3fr; align-items: start; } }
   .head { display: grid; gap: var(--space-s); justify-items: start; }
   h2 { font-size: var(--step-3); }
-  .head .intro { font-size: var(--step--1); color: var(--color-fg); }
+  .head .intro { font-size: var(--step--1); line-height: var(--leading-normal); color: var(--color-fg); }
   .cols { display: grid; gap: var(--space-l) var(--space-m); grid-template-columns: 1fr; }
   /* Projectkaarten staan live vlak naast elkaar */
   .cols[data-cols="2"] { gap: var(--space-2xs); }
