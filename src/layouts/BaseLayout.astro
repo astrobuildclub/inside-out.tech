@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { VisualEditing } from "@sanity/astro/visual-editing";
 import "../styles/index.css";
 import SiteMeta from "../components/SiteMeta.astro";
-import PageProgress from "../components/PageProgress.astro";
+import Interlude from "../components/Interlude.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CookieConsent from "../components/CookieConsent.astro";
@@ -28,7 +28,7 @@ const privacyHref = navigation.privacy ? `/${navigation.privacy.slug}` : "/priva
 ---
 
 <!doctype html>
-<html lang="nl">
+<html lang="nl" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,13 +40,14 @@ const privacyHref = navigation.privacy ? `/${navigation.privacy.slug}` : "/priva
     <link rel="preload" href="/fonts/HafferSQXH-Regular.otf" as="font" type="font/otf" crossorigin />
     <link rel="preload" href="/fonts/HafferSQXH-Medium.otf" as="font" type="font/otf" crossorigin />
     <SiteMeta {settings} {...Astro.props} />
-    <ClientRouter />
+    {/* Paginatransities (Interlude, TRANSITIONS.md §7). Uit in Visual Editing: daar is elke klik een volledige page load. */}
+    {!visualEditingEnabled && <ClientRouter />}
   </head>
   <body>
     <a class="skip-link" href="#inhoud">Naar de inhoud</a>
-    <PageProgress />
+    {!visualEditingEnabled && <Interlude />}
     <Header {navigation} {settings} />
-    <main id="inhoud" data-page tabindex="-1">
+    <main id="inhoud" tabindex="-1">
       <slot />
     </main>
     <Footer {navigation} {settings} />
@@ -74,7 +75,9 @@ const privacyHref = navigation.privacy ? `/${navigation.privacy.slug}` : "/priva
 </html>
 
 <style is:global>
-  :root { --progress-color: var(--lemon); }
+  /* Columns-balken in lemon; overflow-x: clip voorkomt een scrollbalkflits tijdens de transitie. */
+  :root { --interlude-color: var(--lemon); }
+  body { overflow-x: clip; }
   .skip-link {
     position: absolute;
     inset-inline-start: var(--space-s);

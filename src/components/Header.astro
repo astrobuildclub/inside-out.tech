@@ -78,6 +78,8 @@ const a = settings.address;
     matchMedia("(min-width: 62rem)").addEventListener("change", (e) => e.matches && dialog.close());
   }
   document.addEventListener("astro:page-load", init);
+  // Menu dicht zodra een paginatransitie start, anders speelt die erachter.
+  document.addEventListener("interlude:leave", () => document.querySelector<HTMLDialogElement>("[data-menu]")?.close());
 </script>
 
 <style>
