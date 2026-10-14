@@ -33,6 +33,7 @@ Lees eerst `README.md` voor context en `CHANGELOG.md` voor recente wijzigingen.
 - **Kleurthema's:** secties zetten `data-theme` (`white`, `light`, `green`, `lemon`, `dark`), zie `src/styles/themes.css`. Merkkleuren als tokens in `tokens.scss`; geen hex-waarden in componenten.
 - **Stega:** strings die in logica, classes of URL's belanden altijd door `stegaClean()` (zie `LinkButton`, `links.ts`).
 - **Scripts** initialiseren op `astro:page-load` vanwege de `<ClientRouter />`.
+- **Transities:** laag 3b (Interlude 3f1a9ce: columns, in `--lemon`), zie `_standards/TRANSITIONS.md` §7. Engine in `src/lib/interlude/` niet zelf aanpassen (wordt overschreven bij update); nieuwe scripts bij voorkeur via `onPage()`. `<dialog>`-menu's sluiten op `interlude:leave`.
 - **Formulier:** Netlify Forms. Velden in `src/components/sections/Contact.astro` en `public/__forms.html` gelijk houden.
 - **Consent:** nieuwe tracking alleen via `src/lib/consent.ts` in een categorie (`analytics` / `marketing`).
 - **Bron van content is live (inside-out.tech), niet de testexport.** "Draft" in de Webflow-CSV betekent: heeft niet-gepubliceerde wijzigingen. Gepubliceerd = live; afwijkende export-versies staan als Sanity-draft (zie `LIVE` in `scripts/import-webflow.mjs`).

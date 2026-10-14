@@ -7,6 +7,12 @@ Categorieën: **Toegevoegd**, **Gewijzigd**, **Opgelost**, **Verwijderd**, **Bev
 
 ## [Unreleased]
 
+### Toegevoegd
+- Paginatransities met Interlude (laag 3b uit `_standards/TRANSITIONS.md`, commit `3f1a9ce`): `columns` in `--lemon`, `gsap` als dependency. Uit in Visual Editing.
+
+### Verwijderd
+- Voortgangsbalk (`PageProgress.astro`, `page-transitions.ts`): vervangen door Interlude.
+
 ## [2026-10-07]
 
 ### Toegevoegd
